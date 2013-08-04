@@ -23,45 +23,45 @@ If your request is processed successfully, you'll get a JSON response similar to
 (example is a snippet of the response to the first example URL)
 
 {
-	"player"			: "JoanOfArc",
-	"chars"				: "13",
-	"fame"				: "8300",
-	"fame_rank"			: "497",
-	"exp"				: "13152470",
-	"exp_rank"			: "513",
-	"rank"				: "62",
-	"account_fame"		: "35662",
-	"account_fame_rank"	: "264",
-	"guild"				: "Night Owls",
-	"guild_rank"		: "Officer",
-	"created"			: "~1 year and 137 days ago",
-	"last_seen"			: "2013-08-02 07:04:16 at USNorthWest as Rogue",
-	"characters"		: [
-		{
-			"pet"				: "Gummy Bear",
-			"character_dyes"	: {
-				"clothing_dye"		: "Large Blue Lace Cloth",
-				"accessory_dye"		: "Small Sweater Cloth"
-			},
-			"class"				: "Rogue",
-			"level"				: "20",
-			"cqc"				: "4",
-			"fame"				: "608",
-			"exp"				: "805974",
-			"place"				: "589",
-			"equips"			: {
-				"weapon"			: "Dirk of Cronus",
-				"ability"			: "Cloak of Ghostly Concealment",
-				"armor"				: "Spectral Cloth Armor",
-				"ring"				: "Ring of the Pyramid"
-			},
-			"backpack"			: "true",
-			"stats_maxed"		: "8",
-			"last_seen"			: "2013-08-02 07:04:16",
-			"last_server"		: "USNorthWest"
-		},
-		//... (all other characters)
-	]
+    "player"               : "JoanOfArc",
+    "chars"                : "13",
+    "fame"                 : "8300",
+    "fame_rank"            : "497",
+    "exp"                  : "13152470",
+    "exp_rank"             : "513",
+    "rank"                 : "62",
+    "account_fame"         : "35662",
+    "account_fame_rank"    : "264",
+    "guild"                : "Night Owls",
+    "guild_rank"           : "Officer",
+    "created"              : "~1 year and 137 days ago",
+    "last_seen"            : "2013-08-02 07:04:16 at USNorthWest as Rogue",
+    "characters"           : [
+        {
+            "pet"                  : "Gummy Bear",
+            "character_dyes"       : {
+                "clothing_dye"         : "Large Blue Lace Cloth",
+                "accessory_dye"        : "Small Sweater Cloth"
+            },
+            "class"                : "Rogue",
+            "level"                : "20",
+            "cqc"                  : "4",
+            "fame"                 : "608",
+            "exp"                  : "805974",
+            "place"                : "589",
+            "equips"               : {
+                "weapon"               : "Dirk of Cronus",
+                "ability"              : "Cloak of Ghostly Concealment",
+                "armor"                : "Spectral Cloth Armor",
+                "ring"                 : "Ring of the Pyramid"
+            },
+            "backpack"             : "true",
+            "stats_maxed"          : "8",
+            "last_seen"            : "2013-08-02 07:04:16",
+            "last_server"          : "USNorthWest"
+        },
+        //... (all other characters)
+    ]
 }
 
 ##Changelog
