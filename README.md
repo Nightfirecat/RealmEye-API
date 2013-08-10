@@ -38,13 +38,13 @@ Currently, the only method available is to get a player's personal and character
 		<td>player</td>
 		<td>string</td>
 		<td>optional</td>
-		<td>Player name. (case insensitive) If not included, `id` is required</td>
+		<td>Player name. (case insensitive) If not included, <code>id</code> is required</td>
 	</tr>
 	<tr>
 		<td>id</td>
 		<td>string</td>
 		<td>optional</td>
-		<td>11-character id [as it appears in an unnamed player's RealmEye URL](https://www.realmeye.com/recently-seen-unnamed-players). If not included, `player` is requred</td>
+		<td>11-character id <a href="https://www.realmeye.com/recently-seen-unnamed-players">as it appears in an unnamed player's RealmEye URL</a>. If not included, <code>player</code> is requred</td>
 	</tr>
 	<tr>
 		<td>callback</td>
@@ -100,7 +100,7 @@ Currently, the only method available is to get a player's personal and character
 	<tr>
 		<td>account_fame</td>
 		<td>int</td>
-		<td>Account fame. (aka "dead" fame)</td>
+		<td>Account fame. (aka 'dead' fame)</td>
 	</tr>
 	<tr>
 		<td>account_fame_rank</td>
@@ -125,7 +125,7 @@ Currently, the only method available is to get a player's personal and character
 	<tr>
 		<td>last_seen</td>
 		<td>string</td>
-		<td>Date and location of last-seen character. (\<date\> at \<server\> as \<class\>)</td>
+		<td>"{datetime} at {server} as {class}"</td>
 	</tr>
 	<tr>
 		<td>characters</td>
@@ -150,7 +150,7 @@ Currently, the only method available is to get a player's personal and character
 	<tr>
 		<td>character_dyes</td>
 		<td>dict</td>
-		<td>List of character dyes as strings. `clothing_dye` is the name of the large cloth/dye, and `accessory_dye` is the name of the small cloth/dye. Cloth/dye name is empty if un-dyed</td>
+		<td>List of character dyes as strings. <code>clothing_dye</code> is the name of the large cloth/dye, and <code>accessory_dye</code> is the name of the small cloth/dye. Cloth/dye name is empty if un-dyed</td>
 	</tr>
 	<tr>
 		<td>class</td>
@@ -185,7 +185,7 @@ Currently, the only method available is to get a player's personal and character
 	<tr>
 		<td>equips</td>
 		<td>dict</td>
-		<td>List of equipments as strings. Keys are `weapon`, `ability`, `armor`, and `ring`. Empty slots' values are "Empty slot"</td>
+		<td>List of equipments as strings. Keys are <code>weapon</code>, <code>ability</code>, <code>armor</code>, and <code>ring</code>. Empty slots' values are "Empty slot"</td>
 	</tr>
 	<tr>
 		<td>backpack</td>
@@ -200,7 +200,7 @@ Currently, the only method available is to get a player's personal and character
 	<tr>
 		<td>last_seen</td>
 		<td>datetime</td>
-		<td>"\<year\>-\<month\>-\<day\> \<hour\>:\<minute\>:\<second\></td>
+		<td>"{year}-{month}-{day} {hour}:{minute}:{second}"</td>
 	</tr>
 	<tr>
 		<td>last_server</td>
