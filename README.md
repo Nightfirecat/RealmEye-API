@@ -110,12 +110,12 @@ Currently, the only method available is to get a player's personal and character
 	<tr>
 		<td>guild</td>
 		<td>string</td>
-		<td>Guild name</td>
+		<td>Guild name. Not present for guildless players</td>
 	</tr>
 	<tr>
 		<td>guild_rank</td>
 		<td>string</td>
-		<td>Guild position title. (Initiate, Member, Officer, Leader, or Founder)</td>
+		<td>Guild position title. (Initiate, Member, Officer, Leader, or Founder) Not present for guildless players</td>
 	</tr>
 	<tr>
 		<td>created</td>
@@ -125,7 +125,7 @@ Currently, the only method available is to get a player's personal and character
 	<tr>
 		<td>last_seen</td>
 		<td>string</td>
-		<td>"{datetime} at {server} as {class}"</td>
+		<td>"{datetime} at {server} as {class}". If last-seen time/location is hidden, returns "hidden"</td>
 	</tr>
 	<tr>
 		<td>characters</td>
@@ -200,12 +200,12 @@ Currently, the only method available is to get a player's personal and character
 	<tr>
 		<td>last_seen</td>
 		<td>datetime</td>
-		<td>"{year}-{month}-{day} {hour}:{minute}:{second}"</td>
+		<td>"{year}-{month}-{day} {hour}:{minute}:{second}". If last-seen time/location is hidden, returns ""</td>
 	</tr>
 	<tr>
 		<td>last_server</td>
 		<td>string</td>
-		<td>Full name of last server seen in. (e.g. "USNorthWest")</td>
+		<td>Full name of last server seen in. (e.g. "USNorthWest") If last-seen time/location is hidden, returns ""</td>
 	</tr>
 </table>
 
