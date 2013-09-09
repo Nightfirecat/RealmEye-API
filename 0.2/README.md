@@ -157,7 +157,7 @@ Currently, the only method available is to get a player's personal and character
 	<tr>
 		<td>data_pet_id</td>
 		<td>int</td>
-		<td>Item id of the given pet. -1 if character has no pet (passed only if <code>data_vars</code> is <code>true</code>)</td>
+		<td>Item <code>id</code> of the given pet. -1 if character has no pet (passed only if <code>data_vars</code> is <code>true</code>)</td>
 	</tr>
 	<tr>
 		<td>pet</td>
