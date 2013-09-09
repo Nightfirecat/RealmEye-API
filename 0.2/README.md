@@ -3,6 +3,7 @@ the unofficial
 #RealmEye API
 
 A quick and easy portal to getting all the character information you need.
+(v0.2)
 
 ##How to use
 
@@ -19,7 +20,7 @@ Currently, the only method available is to get a player's personal and character
 		<th>Description</th>
 	</tr>
 	<tr>
-		<td>http://webhost.ischool.uw.edu/~joatwood/realmeye_api/</td>
+		<td>http://webhost.ischool.uw.edu/~joatwood/realmeye_api/0.2/</td>
 		<td>GET</td>
 		<td>Get player and character data.</td>
 	</tr>
@@ -238,8 +239,8 @@ Currently, the only method available is to get a player's personal and character
 
 ###Sample requests
 
-    http://webhost.ischool.uw.edu/~joatwood/realmeye_api/?player=joanofarc
-    http://webhost.ischool.uw.edu/~joatwood/realmeye_api/?id=PdT6pPU7qBN&callback=processPlayer
+    http://webhost.ischool.uw.edu/~joatwood/realmeye_api/0.1/?player=joanofarc
+    http://webhost.ischool.uw.edu/~joatwood/realmeye_api/0.1/?id=PdT6pPU7qBN&callback=processPlayer
 
 ###Sample response (for player=joanofarc&data_vars=true)
 
@@ -294,17 +295,3 @@ Currently, the only method available is to get a player's personal and character
             //... (all other characters)
         ]
     }
-
-##Changelog
-
-###v0.2; 09/08/2013
-
-* [v0.1 source released](https://github.com/Nightfirecat/realmeye-api/blob/master/0.1/index.php)
-* Fixed backpack truthy/falsey values across all versions (outputs strings "true"/"false" instead)
-* Added player description lines to output
-* Added `data_vars` parameter
-* Version-specific URLs available; base URL redirects to newest available version
-
-###v0.1; 08/03/2013
-
-* Initial instructions; source code not yet added. (needs refactoring/cleanup)
