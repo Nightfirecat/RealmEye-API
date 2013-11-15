@@ -161,7 +161,7 @@ Currently, the only method available is to get a player's personal and character
 	<tr>
 		<td>pet</td>
 		<td>string</td>
-		<td>Pet type (not player-assigned pet name)</td>
+		<td>Pet type (not player-assigned pet name). "" if character has no pet</td>
 	</tr>
 	<tr>
 		<td>character_dyes</td>
