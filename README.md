@@ -140,8 +140,8 @@ Currently, the only method available is to get a player's personal and character
 	</tr>
 	<tr>
 		<td>characters</td>
-		<td>array</td>
-		<td>Array of displayed characters</td>
+		<td>array / string</td>
+		<td>Array of displayed characters. If characters are hidden, returns "hidden"</td>
 	</tr>
 </table>
 
