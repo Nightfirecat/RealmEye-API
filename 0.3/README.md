@@ -2,7 +2,7 @@ the unofficial
 
 #RealmEye API
 
-A quick and easy portal to getting all the character information you need.
+A quick and easy portal to getting all the character information you need. (v0.3)
 
 ##How to use
 
@@ -19,7 +19,7 @@ Currently, the only method available is to get a player's personal and character
 		<th>Description</th>
 	</tr>
 	<tr>
-		<td>http://webhost.ischool.uw.edu/~joatwood/realmeye_api/</td>
+		<td>http://webhost.ischool.uw.edu/~joatwood/realmeye_api/0.3/</td>
 		<td>GET</td>
 		<td>Get player and character data.</td>
 	</tr>
@@ -62,7 +62,7 @@ Currently, the only method available is to get a player's personal and character
 			When prefaced with a hyphen, directs the API to return all usual values with keys not listed.
 			<br /><br />
 			Note: values nested within arrays will not be displayed unless their parent key is listed as well.
-			(ex. <code>class</code> for characters will not be displayed unless <code>character</code> is also passed within the list)
+			(ex. `class` for characters will not be displayed unless `character` is also passed within the list)
 		</td>
 	</tr>
 	<tr>
@@ -342,24 +342,3 @@ For `player=joanofarc&filter=-characters+desc1+desc2+desc3`:
         "created"              : "~1 year and 137 days ago",
         "last_seen"            : "2013-08-02 07:04:16 at USNorthWest as Rogue"
 	}
-
-##Changelog
-
-###v0.3; 11/16/2013
-* [v0.2 source released](https://github.com/Nightfirecat/realmeye-api/blob/master/0.2/index.php)
-* Added `donator` response field
-* Added filtering using the `filter` parameter
-* Added filtering examples
-* Updated backpack detection to match new HTML structure
-
-###v0.2; 09/08/2013
-
-* [v0.1 source released](https://github.com/Nightfirecat/realmeye-api/blob/master/0.1/index.php)
-* Fixed backpack truthy/falsey values across all versions (outputs strings "true"/"false" instead)
-* Added player description lines to output
-* Added `data_vars` parameter
-* Version-specific URLs available; base URL redirects to newest available version
-
-###v0.1; 08/03/2013
-
-* Initial instructions; source code not yet added. (needs refactoring/cleanup)

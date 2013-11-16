@@ -32,11 +32,19 @@ if(preg_match("/^[a-z]{1,10}$/i",$player)===0 && preg_match("/^[a-z0-9]{11}$/i",
 }
 
 require_once('../items.php'); //import items definitions
-ini_set("user_agent","Realmeye Scraper-API/0.1 (http://www.github.com/nightfirecat)");
+ini_set("user_agent","Realmeye Scraper-API/0.2 (http://www.github.com/nightfirecat)");
 
 //set up some initial vars
 $final_output=Array();
 $callback = isset($_GET['callback']) ? $_GET['callback'] : false;
+if(!isset($_GET['data_vars'])){
+	$data_vars = false;
+} else if($_GET['data_vars']==="true"){
+	$data_vars = true;
+} else {
+	echo_json(Array("error"=>"Invalid `data_vars` value"));
+	exit();
+}
 $url = "https://www.realmeye.com/player/{$player}/";
 
 //set up xpath
@@ -85,7 +93,13 @@ if($nodelist->length==0){	//this player isn't on realmeye
 				$final_output["last_seen"] = $test2;
 			}
 	}
-
+	
+	//output description lines (1-3)
+	for($i = 1; $i <= 3; $i++){
+		$temp = $xpath->query("//div[contains(@class, 'line".$i."')]");
+		$final_output["desc".$i] = ($temp->length > 0) ? $temp->item(0)->nodeValue : "";
+	}
+	
 	$nodelist = $xpath->query("//table[@id]//th"); //get column headers to figure out what data's there
 	
 	//if they have no characters for some reason...
@@ -126,8 +140,14 @@ if($nodelist->length==0){	//this player isn't on realmeye
 				for($j=0;$j<$node->childNodes->length;$j++){
 						if($character_table[$j]){ //if the field is not ""
 								if($character_table[$j]=="pet"){
-									if($node->childNodes->item($j)->hasChildNodes()){
-										$val = $ITEMS[($node->childNodes->item($j)->childNodes->item(0)->attributes->getNamedItem("data-item")->nodeValue)][0];
+									$has_pet = $node->childNodes->item($j)->hasChildNodes();
+									$pet_data_id = $has_pet?$node->childNodes->item($j)->childNodes->item(0)->attributes->getNamedItem("data-item")->nodeValue:-1;
+									if($data_vars){
+										$character["data_pet_id"] = (int) $pet_data_id;
+									}
+									
+									if($has_pet){
+										$val = $ITEMS[$pet_data_id][0];
 									} else {
 										$val = "";
 									}
@@ -139,14 +159,26 @@ if($nodelist->length==0){	//this player isn't on realmeye
 									$attrs = $node->childNodes->item($j)->childNodes->item(0)->attributes;
 									$dye1 = $attrs->getNamedItem("data-clothing-dye-id")->nodeValue;
 									$dye2 = $attrs->getNamedItem("data-accessory-dye-id")->nodeValue;
-									$val = Array("clothing_dye"=>($temp=$ITEMS[$dye1][0])?$temp:"", "accessory_dye"=>($temp=$ITEMS[$dye2][0])?$temp:"");
+									$val = Array();
+									if($data_vars){ $val["data_clothing_dye"] = (int) $attrs->getNamedItem("data-dye1")->nodeValue; }
+									$val["clothing_dye"] = ($temp=$ITEMS[$dye1][0])?$temp:"";
+									if($data_vars){ $val["data_accessory_dye"] = (int) $attrs->getNamedItem("data-dye2")->nodeValue; }
+									$val["accessory_dye"] = ($temp=$ITEMS[$dye2][0])?$temp:"";
 								}else if($character_table[$j]=="equips"){
 									$items = $node->childNodes->item($j)->childNodes;
 									$item1 = $items->item(0)->attributes->getNamedItem("data-item")->nodeValue;
 									$item2 = $items->item(1)->attributes->getNamedItem("data-item")->nodeValue;
 									$item3 = $items->item(2)->attributes->getNamedItem("data-item")->nodeValue;
 									$item4 = $items->item(3)->attributes->getNamedItem("data-item")->nodeValue;
-									$val = Array("weapon"=>$ITEMS[$item1][0],"ability"=>$ITEMS[$item2][0],"armor"=>$ITEMS[$item3][0],"ring"=>$ITEMS[$item4][0]);
+									$val = Array();
+									if($data_vars){ $val["data_weapon_id"] = (int) $item1; }
+									$val["weapon"] = $ITEMS[$item1][0];
+									if($data_vars){ $val["data_ability_id"] = (int) $item2; }
+									$val["ability"] = $ITEMS[$item2][0];
+									if($data_vars){ $val["data_armor_id"] = (int) $item3; }
+									$val["armor"] = $ITEMS[$item3][0];
+									if($data_vars){ $val["data_ring_id"] = (int) $item4; }
+									$val["ring"] = $ITEMS[$item4][0];
 								}else if($character_table[$j]=="last_seen"){
 									$val = $node->childNodes->item($j)->nodeValue;
 								}else if($character_table[$j]=="last_server"){
