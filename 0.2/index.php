@@ -164,6 +164,12 @@ if($nodelist->length==0){	//this player isn't on realmeye
 									$val["clothing_dye"] = ($temp=$ITEMS[$dye1][0])?$temp:"";
 									if($data_vars){ $val["data_accessory_dye"] = (int) $attrs->getNamedItem("data-dye2")->nodeValue; }
 									$val["accessory_dye"] = ($temp=$ITEMS[$dye2][0])?$temp:"";
+									
+									//class+skin data-var check
+									if($data_vars){
+										$character["data_class_id"] = (int) $attrs->getNamedItem("data-class")->nodeValue;
+										$character["data_skin_id"] = (int) $attrs->getNamedItem("data-skin")->nodeValue;
+									}
 								}else if($character_table[$j]=="equips"){
 									$items = $node->childNodes->item($j)->childNodes;
 									$item1 = $items->item(0)->attributes->getNamedItem("data-item")->nodeValue;
@@ -179,6 +185,9 @@ if($nodelist->length==0){	//this player isn't on realmeye
 									$val["armor"] = $ITEMS[$item3][0];
 									if($data_vars){ $val["data_ring_id"] = (int) $item4; }
 									$val["ring"] = $ITEMS[$item4][0];
+									
+									//backpack check
+									$character["backpack"] = ($node->childNodes->item($j)->childNodes->length==5?"true":"false");
 								}else if($character_table[$j]=="last_seen"){
 									$val = $node->childNodes->item($j)->nodeValue;
 								}else if($character_table[$j]=="last_server"){
@@ -192,9 +201,6 @@ if($nodelist->length==0){	//this player isn't on realmeye
 									}
 								}
 								$character[$character_table[$j]] = $val;
-								if($character_table[$j]=="equips"){
-									$character["backpack"] = ($node->childNodes->item($j)->childNodes->length==5?"true":"false");
-								}
 						}
 				}
 			//if the character has no pet, bp, last-seen or last-server, set their values to "" as opposed to leaving their values out

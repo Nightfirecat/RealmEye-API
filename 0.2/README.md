@@ -182,6 +182,16 @@ Currently, the only method available is to get a player's personal and character
 		<td>Class name</td>
 	</tr>
 	<tr>
+		<td>data_class_id</td>
+		<td>int</td>
+		<td><code>id</code> assigned to that character's class (passed only if <code>data_vars</code> is <code>true</code>)</td>
+	</tr>
+	<tr>
+		<td>data_skin_id</td>
+		<td>int</td>
+		<td><code>id</code> assigned to that character's skin. 0 if character is using the class's default skin (passed only if <code>data_vars</code> is <code>true</code>)</td>
+	</tr>
+	<tr>
 		<td>level</td>
 		<td>int</td>
 		<td>Character level</td>
