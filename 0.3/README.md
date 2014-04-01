@@ -248,6 +248,13 @@ Currently, the only method available is to get a player's personal and character
 		<td>Number (out of 8) of stats maxed on character</td>
 	</tr>
 	<tr>
+		<td>stats</td>
+		<td>dict</td>
+		<td>
+			List of individual base stats (hp, mp, attack, defense, speed, vitality, wisdom, and dexterity) as ints.
+		</td>
+	</tr>
+	<tr>
 		<td>last_seen</td>
 		<td>datetime</td>
 		<td>"{year}-{month}-{day} {hour}:{minute}:{second}". If last-seen time/location is hidden, returns ""</td>
@@ -315,6 +322,16 @@ For `player=joanofarc&data_vars=true`:
                 },
                 "backpack"             : "true",
                 "stats_maxed"          : 8,
+				"stats"                : {
+				    "hp"                   : 720,
+					"mp"                   : 252,
+					"attack"               : 50,
+					"defense"              : 25,
+					"speed"                : 75,
+					"vitality"             : 40,
+					"wisdom"               : 50,
+					"dexterity"            : 75
+				},
                 "last_seen"            : "2013-08-02 07:04:16",
                 "last_server"          : "USNorthWest"
             },
