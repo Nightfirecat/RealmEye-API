@@ -31,7 +31,7 @@ require "$definitions_file";
 //translate JS array definitions to PHP array definitions and write to $file
 function update_definitions($file){
 	$js_definitions = file_get_contents("http://www.realmeye.com/s/y3/js/definition.js");
-	$inter_definitions = preg_replace("/('\-[\d]+'|[\d]+):\[([^]]+)\],?/", "\t$1=>Array($2),\n", $js_definitions);
+	$inter_definitions = preg_replace("/('\-[\d]+(?:e[\d]+)?'|\"\-[\d]+(?:e[\d]+)?\"|[\d]+(?:e[\d]+)?):\[([^]]+)\],?/", "\t$1=>Array($2),\n", $js_definitions);
 	$php_definitions = preg_replace("/^items\=\{(.+),\n\};$/s", "<?php \$ITEMS=Array(\n$1\n);?>", $inter_definitions);
 	file_put_contents($file, $php_definitions);
 }
