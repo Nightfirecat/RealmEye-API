@@ -282,93 +282,99 @@ Currently, the only method available is to get a player's personal and character
 
 For `player=joanofarc&data_vars=true`:
 
-    {
-        "player"               : "JoanOfArc",
-        "chars"                : 13,
-        "fame"                 : 8300,
-        "fame_rank"            : 497,
-        "exp"                  : 13152470,
-        "exp_rank"             : 513,
-        "rank"                 : 62,
-        "account_fame"         : 35662,
-        "account_fame_rank"    : 264,
-        "guild"                : "Night Owls",
-        "guild_rank"           : "Officer",
-        "created"              : "~1 year and 137 days ago",
-        "last_seen"            : "2013-08-02 07:04:16 at USNorthWest as Rogue",
-		"desc1"                : "I fight for the glory of France.",
-		"desc2"                : "https:\/\/www.youtube.com\/nightfirecat\/",
-		"desc3"                : "https:\/\/JoanOfArcRotMG.wordpress.com\/",
-        "characters"           : [
-            {
-			    "data_pet_id"          : 32611,
-                "pet"                  : "Gummy Bear",
-                "character_dyes"       : {
-				    "data_clothing_dye"    : 150994946,
-                    "clothing_dye"         : "Large Blue Lace Cloth",
-					"data_accessory_dye"   : 83886083,
-                    "accessory_dye"        : "Small Sweater Cloth"
-                },
-                "class"                : "Rogue",
-                "level"                : 20,
-                "cqc"                  : 4,
-                "fame"                 : 608,
-                "exp"                  : 805974,
-                "place"                : 589,
-                "equips"               : {
-				    "data_weapon_id"       : 3082,
-                    "weapon"               : "Dirk of Cronus",
-					"data_ability_id"      : 2855,
-                    "ability"              : "Cloak of Ghostly Concealment",
-					"data_armor_id"        : 3112,
-                    "armor"                : "Spectral Cloth Armor",
-					"data_ring_id"         : 2978,
-                    "ring"                 : "Ring of the Pyramid"
-                },
-                "backpack"             : "true",
-                "stats_maxed"          : 8,
-				"stats"                : {
-				    "hp"                   : 720,
-					"mp"                   : 252,
-					"attack"               : 50,
-					"defense"              : 25,
-					"speed"                : 75,
-					"vitality"             : 40,
-					"wisdom"               : 50,
-					"dexterity"            : 75
-				},
-                "last_seen"            : "2013-08-02 07:04:16",
-                "last_server"          : "USNorthWest"
-            },
-            //... (all other characters)
-        ]
-    }
+```
+{
+	"player"               : "JoanOfArc",
+	"chars"                : 13,
+	"fame"                 : 8300,
+	"fame_rank"            : 497,
+	"exp"                  : 13152470,
+	"exp_rank"             : 513,
+	"rank"                 : 62,
+	"account_fame"         : 35662,
+	"account_fame_rank"    : 264,
+	"guild"                : "Night Owls",
+	"guild_rank"           : "Officer",
+	"created"              : "~1 year and 137 days ago",
+	"last_seen"            : "2013-08-02 07:04:16 at USNorthWest as Rogue",
+	"desc1"                : "I fight for the glory of France.",
+	"desc2"                : "https:\/\/www.youtube.com\/nightfirecat\/",
+	"desc3"                : "https:\/\/JoanOfArcRotMG.wordpress.com\/",
+	"characters"           : [
+		{
+			"data_pet_id"          : 32611,
+			"pet"                  : "Gummy Bear",
+			"character_dyes"       : {
+				"data_clothing_dye"    : 150994946,
+				"clothing_dye"         : "Large Blue Lace Cloth",
+				"data_accessory_dye"   : 83886083,
+				"accessory_dye"        : "Small Sweater Cloth"
+			},
+			"class"                : "Rogue",
+			"level"                : 20,
+			"cqc"                  : 4,
+			"fame"                 : 608,
+			"exp"                  : 805974,
+			"place"                : 589,
+			"equips"               : {
+				"data_weapon_id"       : 3082,
+				"weapon"               : "Dirk of Cronus",
+				"data_ability_id"      : 2855,
+				"ability"              : "Cloak of Ghostly Concealment",
+				"data_armor_id"        : 3112,
+				"armor"                : "Spectral Cloth Armor",
+				"data_ring_id"         : 2978,
+				"ring"                 : "Ring of the Pyramid"
+			},
+			"backpack"             : "true",
+			"stats_maxed"          : 8,
+			"stats"                : {
+				"hp"                   : 720,
+				"mp"                   : 252,
+				"attack"               : 50,
+				"defense"              : 25,
+				"speed"                : 75,
+				"vitality"             : 40,
+				"wisdom"               : 50,
+				"dexterity"            : 75
+			},
+			"last_seen"            : "2013-08-02 07:04:16",
+			"last_server"          : "USNorthWest"
+		},
+		//... (all other characters)
+	]
+}
+```
 
 For `player=joanofarc&filter=player+chars+fame`:
 
-    {
-        "player"               : "JoanOfArc",
-		"chars"                : 13,
-		"fame"                 : 8300
-	}
+```
+{
+	"player"               : "JoanOfArc",
+	"chars"                : 13,
+	"fame"                 : 8300
+}
+```
 
 For `player=joanofarc&filter=-characters+desc1+desc2+desc3`:
 
-    {
-        "player"               : "JoanOfArc",
-        "chars"                : 13,
-        "fame"                 : 8300,
-        "fame_rank"            : 497,
-        "exp"                  : 13152470,
-        "exp_rank"             : 513,
-        "rank"                 : 62,
-        "account_fame"         : 35662,
-        "account_fame_rank"    : 264,
-        "guild"                : "Night Owls",
-        "guild_rank"           : "Officer",
-        "created"              : "~1 year and 137 days ago",
-        "last_seen"            : "2013-08-02 07:04:16 at USNorthWest as Rogue"
-	}
+```
+{
+	"player"               : "JoanOfArc",
+	"chars"                : 13,
+	"fame"                 : 8300,
+	"fame_rank"            : 497,
+	"exp"                  : 13152470,
+	"exp_rank"             : 513,
+	"rank"                 : 62,
+	"account_fame"         : 35662,
+	"account_fame_rank"    : 264,
+	"guild"                : "Night Owls",
+	"guild_rank"           : "Officer",
+	"created"              : "~1 year and 137 days ago",
+	"last_seen"            : "2013-08-02 07:04:16 at USNorthWest as Rogue"
+}
+```
 
 ##Changelog
 
