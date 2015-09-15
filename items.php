@@ -3,7 +3,7 @@
 //definitions URL, PHP definition file
 //all directory locations are relative to script location (/0.1/, /0.2/, etc)
 $definitions_url = "http://www.realmeye.com/s/y3/js/definition.js";
-$definitions_file = "../definition.php";
+$definitions_file = "definition.php";
 
 //get headers, check if it's been updated since last seen
 $definitions_headers = @get_headers($definitions_url, 1);

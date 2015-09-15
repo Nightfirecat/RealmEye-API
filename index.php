@@ -4,11 +4,6 @@
  * Scrapes character information for a specific player
  */
 
-//error handling (don't display errors, but still log them)
-ini_set("display_errors",0);
-
-header("access-control-allow-origin: *");
-
 if(isset($_GET['player']) && $_GET['player']){
 	$player = $_GET['player'];
 } else if(isset($_GET['id']) && $_GET['id']){
@@ -21,22 +16,27 @@ if(preg_match("/^[a-z]{1,10}$/i",$player)===0 && preg_match("/^[a-z0-9]{11}$/i",
 	//Sneaky little hobbitses.
 	header("Content-Type: application/json; charset=utf-8");
 	header("HTTP/1.1 400 Invalid Request");
-	echo_json(Array("error"=>"Invalid player name"));
-	exit();
+	echo_json_and_exit(Array("error"=>"Invalid player name"));
 } else if(isset($_GET['callback'])&&!preg_match('/^[a-zA-Z$_][a-zA-Z0-9$_]*$/', $_GET['callback'])){
 	//Possible XSS... Yikes!
 	header("Content-Type: application/json; charset=utf-8");
 	header("HTTP/1.1 400 Invalid Request");
-	echo_json(Array("error"=>"Invalid callback name"));
-	exit();
+	echo_json_and_exit(Array("error"=>"Invalid callback name"));
 }
 
-require_once('../items.php'); //import items definitions
-ini_set("user_agent","Realmeye Scraper-API/0.1 (http://www.github.com/nightfirecat)");
+require_once('items.php'); //import items definitions
+ini_set("user_agent","Realmeye-API/0.3 (https://github.com/Nightfirecat/RealmEye-API)");
 
 //set up some initial vars
 $final_output=Array();
 $callback = isset($_GET['callback']) ? $_GET['callback'] : false;
+if(!isset($_GET['data_vars'])){
+	$data_vars = false;
+} else if($_GET['data_vars']==="true"){
+	$data_vars = true;
+} else {
+	echo_json_and_exit(Array("error"=>"Invalid `data_vars` value"));
+}
 $url = "https://www.realmeye.com/player/{$player}/";
 
 //set up xpath
@@ -47,12 +47,16 @@ $nodelist = $xpath->query("//h1"); //grab the user's display name
 
 if($nodelist->length==0){	//this player isn't on realmeye	
 	header('Content-Type: application/json; charset=utf-8');
-	echo_json(Array("error"=>"{$_GET['player']} could not be found!"));
+	echo_json_and_exit(Array("error"=>"{$_GET['player']} could not be found!"));
 } else {
 	//set headers
 	header('Content-Type: ' . ($callback ? 'application/javascript' : 'application/json') . '; charset=utf-8');
 
 	$final_output["player"] = $nodelist->item(0)->nodeValue; //player's name as it appears ingame
+	
+	//enter donation status
+	$nodelist = $xpath->query("//a[@class=\"donate\"]");
+	$final_output["donator"] = ($nodelist->length > 0) ? "true" : "false";
 
 	$nodelist = $xpath->query("//table[@class=\"summary\"]//tr"); //get the summary table (escaped quotes)
 	foreach($nodelist as $node){
@@ -85,12 +89,18 @@ if($nodelist->length==0){	//this player isn't on realmeye
 				$final_output["last_seen"] = $test2;
 			}
 	}
-
+	
+	//output description lines (1-3)
+	for($i = 1; $i <= 3; $i++){
+		$temp = $xpath->query("//div[contains(@class, 'line".$i."')]");
+		$final_output["desc".$i] = ($temp->length > 0) ? $temp->item(0)->nodeValue : "";
+	}
+	
 	$nodelist = $xpath->query("//table[@id]//th"); //get column headers to figure out what data's there
 	
 	//if they have no characters for some reason...
 	if($nodelist->length==0){
-		if($final_output["chars"]=="N/A"){ /*number of chars is N/A*/
+		if($final_output["chars"]==="N/A"){ /*number of chars is N/A*/
 			//hidden characters, output characters=>hidden
 			// http://www.realmeye.com/player/wizgazelle
 			$final_output["characters"] = "hidden";
@@ -101,15 +111,15 @@ if($nodelist->length==0){	//this player isn't on realmeye
 		}
 	}else{ //they have characters, find out their bp/pet status (if no last seen, won't be added)
 		$character_table;
-		if($nodelist->length==12 || $nodelist->length==10){
+		if($nodelist->length==13 || ($nodelist->length==11 && $nodelist->item(9)->nodeValue=="")){
 			//bp+pet
 			// http://www.realmeye.com/player/Wylem
-			$character_table = Array("pet","character_dyes","class","level","cqc","fame","exp","place","equips","stats_maxed", "last_seen", "last_server");
-		}else if($nodelist->length==11 || $nodelist->length==9){
-			if($nodelist->item(1)->nodeValue!=""){
+			$character_table = Array("pet","character_dyes","class","level","cqc","fame","exp","place","equips","backpack","stats_maxed", "last_seen", "last_server");
+		}else if($nodelist->length==12 || $nodelist->length==10){
+			if($nodelist->item(8)->nodeValue==""){
 				//they have a backpack, but no pets
 				// http://www.realmeye.com/player/Stration
-				$character_table = Array("character_dyes","class","level","cqc","fame","exp","place","equips","stats_maxed", "last_seen", "last_server");
+				$character_table = Array("character_dyes","class","level","cqc","fame","exp","place","equips","backpack","stats_maxed", "last_seen", "last_server");
 			}else{
 				//they have a pet, but no backpacks
 				// http://www.realmeye.com/player/Yukiyan
@@ -125,31 +135,74 @@ if($nodelist->length==0){	//this player isn't on realmeye
 		foreach($nodelist as $node){ //for each row of the character table
 				for($j=0;$j<$node->childNodes->length;$j++){
 						if($character_table[$j]){ //if the field is not ""
-								if($character_table[$j]=="pet"){
-									if($node->childNodes->item($j)->hasChildNodes()){
-										$val = $ITEMS[($node->childNodes->item($j)->childNodes->item(0)->attributes->getNamedItem("data-item")->nodeValue)][0];
+								if($character_table[$j]==="pet"){
+									$has_pet = $node->childNodes->item($j)->hasChildNodes();
+									$pet_data_id = $has_pet?$node->childNodes->item($j)->childNodes->item(0)->attributes->getNamedItem("data-item")->nodeValue:-1;
+									if($data_vars){
+										$character["data_pet_id"] = (int) $pet_data_id;
+									}
+									
+									if($has_pet){
+										$val = $ITEMS[$pet_data_id][0];
 									} else {
 										$val = "";
 									}
 									
-								//}else if($character_table[$j]=="cqc"){
-								//}else if($character_table[$j]=="stats_maxed"){
+								//}else if($character_table[$j]==="cqc"){
 								
-								}else if($character_table[$j]=="character_dyes"){
+								}else if($character_table[$j]==="stats_maxed"){
+									$val = (int) $node->childNodes->item($j)->nodeValue;
+									
+									$stats_list = Array("hp","mp","attack","defense","speed","vitality","wisdom","dexterity");
+									$attrs = $node->childNodes->item($j)->childNodes->item(0)->attributes;
+									$bonuses = $attrs->getNamedItem("data-bonuses")->nodeValue;
+									$bonuses = explode(",", substr($bonuses, 1, -1));
+									$total_stats = $attrs->getNamedItem("data-stats")->nodeValue;
+									$total_stats = explode(",", substr($total_stats, 1, -1));
+									
+									$stats = Array();
+									$stats_length = count($stats_list);
+									for($i = 0; $i < $stats_length; $i++){
+										$stats[$stats_list[$i]] = $total_stats[$i] - $bonuses[$i];
+									}
+									
+									$character["stats"] = $stats;
+								}else if($character_table[$j]==="character_dyes"){
 									$attrs = $node->childNodes->item($j)->childNodes->item(0)->attributes;
 									$dye1 = $attrs->getNamedItem("data-clothing-dye-id")->nodeValue;
 									$dye2 = $attrs->getNamedItem("data-accessory-dye-id")->nodeValue;
-									$val = Array("clothing_dye"=>($temp=$ITEMS[$dye1][0])?$temp:"", "accessory_dye"=>($temp=$ITEMS[$dye2][0])?$temp:"");
-								}else if($character_table[$j]=="equips"){
+									$val = Array();
+									if($data_vars){ $val["data_clothing_dye"] = (int) $attrs->getNamedItem("data-dye1")->nodeValue; }
+									$val["clothing_dye"] = ($temp=$ITEMS[$dye1][0])?$temp:"";
+									if($data_vars){ $val["data_accessory_dye"] = (int) $attrs->getNamedItem("data-dye2")->nodeValue; }
+									$val["accessory_dye"] = ($temp=$ITEMS[$dye2][0])?$temp:"";
+									
+									//class+skin data-var check
+									if($data_vars){
+										$character["data_class_id"] = (int) $attrs->getNamedItem("data-class")->nodeValue;
+										$character["data_skin_id"] = (int) $attrs->getNamedItem("data-skin")->nodeValue;
+									}
+								}else if($character_table[$j]==="equips"){
 									$items = $node->childNodes->item($j)->childNodes;
 									$item1 = $items->item(0)->attributes->getNamedItem("data-item")->nodeValue;
 									$item2 = $items->item(1)->attributes->getNamedItem("data-item")->nodeValue;
 									$item3 = $items->item(2)->attributes->getNamedItem("data-item")->nodeValue;
 									$item4 = $items->item(3)->attributes->getNamedItem("data-item")->nodeValue;
-									$val = Array("weapon"=>$ITEMS[$item1][0],"ability"=>$ITEMS[$item2][0],"armor"=>$ITEMS[$item3][0],"ring"=>$ITEMS[$item4][0]);
-								}else if($character_table[$j]=="last_seen"){
+									$val = Array();
+									if($data_vars){ $val["data_weapon_id"] = (int) $item1; }
+									$val["weapon"] = $ITEMS[$item1][0];
+									if($data_vars){ $val["data_ability_id"] = (int) $item2; }
+									$val["ability"] = $ITEMS[$item2][0];
+									if($data_vars){ $val["data_armor_id"] = (int) $item3; }
+									$val["armor"] = $ITEMS[$item3][0];
+									if($data_vars){ $val["data_ring_id"] = (int) $item4; }
+									$val["ring"] = $ITEMS[$item4][0];
+									
+									//backpack check
+									$character["backpack"] = ($node->childNodes->item($j)->childNodes->length==5?"true":"false");
+								}else if($character_table[$j]==="last_seen"){
 									$val = $node->childNodes->item($j)->nodeValue;
-								}else if($character_table[$j]=="last_server"){
+								}else if($character_table[$j]==="last_server"){
 									$val = $node->childNodes->item($j)->childNodes->item(0)->attributes->getNamedItem("title")->nodeValue;
 								}else{
 									$temp = $node->childNodes->item($j)->nodeValue;
@@ -159,14 +212,11 @@ if($nodelist->length==0){	//this player isn't on realmeye
 										$val = $temp;
 									}
 								}
-								$character[$character_table[$j]] = $val;
-								if($character_table[$j]=="equips"){
-									$character["backpack"] = ($node->childNodes->item($j)->childNodes->length==5?"true":"false");
-								}
+							$character[$character_table[$j]] = $val;
 						}
 				}
 			//if the character has no pet, bp, last-seen or last-server, set their values to "" as opposed to leaving their values out
-			$optionalColumns = Array("pet","last_seen","last_server");
+			$optionalColumns = Array("pet","backpack","last_seen","last_server");
 			foreach($optionalColumns as $optional_column){
 				if(!$character[$optional_column]){
 					$character[$optional_column] = "";
@@ -176,7 +226,11 @@ if($nodelist->length==0){	//this player isn't on realmeye
 		}
 	}
 	
-	echo_json($final_output);
+	$intersect_filter = create_filter($final_output);
+	$final_output = array_intersect_key_recursive($final_output, $intersect_filter);
+	
+	//output and exit
+	echo_json_and_exit($final_output);
 	
 }
 
@@ -184,8 +238,54 @@ if($nodelist->length==0){	//this player isn't on realmeye
 //Function definitions
 //
 
-function echo_json($output_array){
-	ob_start('ob_gzhandler');
+function create_filter($full_output){
+	$filter = create_filter_base($full_output);
+	if(isset($_GET['filter']) && strlen($_GET['filter'])){
+		$filter_terms = $_GET['filter'];
+		if($filter_terms[0]==="-"){
+			$mode = "diff";
+			$filter_terms = substr($filter_terms, 1);
+		} else {
+			$mode = "intersect";
+		}
+		$filter_terms = array_fill_keys(explode(" ",$filter_terms),null); //must be assoc. array; values don't matter
+		$filter_method = "array_".$mode."_key";
+		$filter = $filter_method($filter, $filter_terms);
+	}
+	return $filter;
+}
+
+function create_filter_base($full_output){
+	$filter_base = Array();
+	foreach($full_output as $key => $value){
+		if(!is_int($key)){
+			$filter_base[$key] = $key;
+		}
+		if(is_array($value)){
+			$filter_base = array_merge($filter_base,create_filter_base($value));
+		}
+	}
+	return $filter_base;
+}
+
+function array_intersect_key_recursive($array1, $array2){
+	$output = Array();
+	foreach($array1 as $key => $value){
+		if(is_int($key) || in_array($key, $array2)){
+			if(is_array($value)){
+				$array_value = array_intersect_key_recursive($value, $array2);
+				if(!is_int($key) || !empty($array_value)){
+					$output[$key] = $array_value;
+				}
+			} else {
+				$output[$key] = $value;
+			}
+		}
+	}
+	return $output;
+}
+
+function echo_json_and_exit($output_array){
 	if($GLOBALS['callback']){
 		echo $GLOBALS['callback'] . '(';
 	}
@@ -193,6 +293,7 @@ function echo_json($output_array){
 	if($GLOBALS['callback']){
 		echo ')';
 	}
+	exit();
 }
 
 ?>
