@@ -19,7 +19,7 @@ Currently, the only method available is to get a player's personal and character
 		<th>Description</th>
 	</tr>
 	<tr>
-		<td>http://webhost.ischool.uw.edu/~joatwood/realmeye_api/0.3/</td>
+		<td>http://nightfirec.at/realmeye-api/0.3/</td>
 		<td>GET</td>
 		<td>Get player and character data.</td>
 	</tr>
@@ -268,10 +268,10 @@ Currently, the only method available is to get a player's personal and character
 
 ###Sample requests
 
-    http://webhost.ischool.uw.edu/~joatwood/realmeye_api/?player=joanofarc
-    http://webhost.ischool.uw.edu/~joatwood/realmeye_api/?id=PdT6pPU7qBN&callback=processPlayer
-	http://webhost.ischool.uw.edu/~joatwood/realmeye_api/?player=joanofarc&filter=player+chars+fame
-	http://webhost.ischool.uw.edu/~joatwood/realmeye_api/?player=joanofarc&filter=-characters+desc1+desc2+desc3
+    http://nightfirec.at/realmeye-api/?player=joanofarc
+    http://nightfirec.at/realmeye-api/?id=PdT6pPU7qBN&callback=processPlayer
+	http://nightfirec.at/realmeye-api/?player=joanofarc&filter=player+chars+fame
+	http://nightfirec.at/realmeye-api/?player=joanofarc&filter=-characters+desc1+desc2+desc3
 
 ###Sample responses
 
