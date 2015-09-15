@@ -1,0 +1,12 @@
+# Don't need to see those!
+<Files items.php definition.php LICENSE README.md>
+	Order allow,deny
+	Deny from all
+	Satisfy All
+</Files>
+
+Options +FollowSymlinks
+
+# Redirect version-specific requests (old feature) to current
+RewriteEngine on
+RewriteRule "^0.[1-3]/?$" "./" [QSA]
