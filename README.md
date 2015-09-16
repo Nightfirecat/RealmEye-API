@@ -378,24 +378,8 @@ For `player=joanofarc&filter=-characters+desc1+desc2+desc3`:
 
 ##Changelog
 
-###v0.31; 3/31/2014
-* Added the `stats` field
-
-###v0.3; 11/16/2013
-* [v0.2 source released](https://github.com/Nightfirecat/realmeye-api/blob/master/0.2/index.php)
-* Added `donator` response field
-* Added filtering using the `filter` parameter
-* Added filtering examples
-* Updated backpack detection to match new HTML structure
-
-###v0.2; 09/08/2013
-
-* [v0.1 source released](https://github.com/Nightfirecat/realmeye-api/blob/master/0.1/index.php)
-* Fixed backpack truthy/falsey values across all versions (outputs strings "true"/"false" instead)
-* Added player description lines to output
-* Added `data_vars` parameter
-* Version-specific URLs available; base URL redirects to newest available version
-
-###v0.1; 08/03/2013
-
-* Initial instructions; source code not yet added. (needs refactoring/cleanup)
+###v0.3.2; 9/16/2015
+* Removed old code (and old changelog)
+* Added .gitignore and .htaccess
+* Closed #12
+* README reflects domain change
