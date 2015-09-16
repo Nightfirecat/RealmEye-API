@@ -1,9 +1,9 @@
 # Don't need to see those!
-<Files items.php definition.php LICENSE README.md>
+<FilesMatch "(items.php|definition.php|LICENSE|README.md)">
 	Order allow,deny
 	Deny from all
 	Satisfy All
-</Files>
+</FilesMatch>
 
 Options +FollowSymlinks
 
