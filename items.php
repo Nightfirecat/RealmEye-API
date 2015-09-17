@@ -9,7 +9,10 @@ $definitions_file = "definition.php";
 $definitions_headers = @get_headers($definitions_url, 1);
 if($definitions_headers){
 	//last-modified file
-	$last_seen_modified_file = "../modified.txt";
+	$last_seen_modified_file = "definition-modified.txt";
+	if (!file_exists($last_seen_modified_file)) {
+		file_put_contents($last_seen_modified_file, '');
+	}
 	$last_modified = $definitions_headers["Last-Modified"];
 	
 	//get last entry if redirects were necessary
@@ -17,7 +20,7 @@ if($definitions_headers){
 		$last_modified = $last_modified[count($last_modified)-1];
 	}
 	
-	//compare to local 
+	//compare to locally cached timestamp (of last update)
 	$last_seen_modified = file_get_contents($last_seen_modified_file);
 	if(!$last_seen_modified || $last_seen_modified !== $last_modified){
 		file_put_contents($last_seen_modified_file, $last_modified);
