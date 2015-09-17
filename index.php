@@ -173,9 +173,15 @@ if($nodelist->length==0){	//this player isn't on realmeye
 									$dye2 = $attrs->getNamedItem("data-accessory-dye-id")->nodeValue;
 									$val = Array();
 									if($data_vars){ $val["data_clothing_dye"] = (int) $attrs->getNamedItem("data-dye1")->nodeValue; }
-									$val["clothing_dye"] = ($temp=$ITEMS[$dye1][0])?$temp:"";
+									if (!isset($ITEMS[$dye1][0])) {
+										$ITEMS[$dye1][0] = "";
+									}
+									$val["clothing_dye"] = $ITEMS[$dye1][0];
 									if($data_vars){ $val["data_accessory_dye"] = (int) $attrs->getNamedItem("data-dye2")->nodeValue; }
-									$val["accessory_dye"] = ($temp=$ITEMS[$dye2][0])?$temp:"";
+									if (!isset($ITEMS[$dye2][0])) {
+										$ITEMS[$dye2][0] = "";
+									}
+									$val["accessory_dye"] = $ITEMS[$dye2][0];
 									
 									//class+skin data-var check
 									if($data_vars){
@@ -215,10 +221,10 @@ if($nodelist->length==0){	//this player isn't on realmeye
 							$character[$character_table[$j]] = $val;
 						}
 				}
-			//if the character has no pet, bp, last-seen or last-server, set their values to "" as opposed to leaving their values out
+			//if the character has no pet, bp, last-seen or last-server index, set their values to "" as opposed to leaving the index out
 			$optionalColumns = Array("pet","backpack","last_seen","last_server");
 			foreach($optionalColumns as $optional_column){
-				if(!$character[$optional_column]){
+				if(!isset($character[$optional_column])) {
 					$character[$optional_column] = "";
 				}
 			}
