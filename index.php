@@ -60,34 +60,34 @@ if($nodelist->length==0){	//this player isn't on realmeye
 
 	$nodelist = $xpath->query("//table[@class=\"summary\"]//tr"); //get the summary table (escaped quotes)
 	foreach($nodelist as $node){
-		$test1=$node->childNodes->item(0)->nodeValue;
-			$test2 = $node->childNodes->item(1)->nodeValue;
-			$regex1 = "/^([\d]+).*/";		//strips fame or experience amount
-			$regex2 = "/^.*?\(([\d]+).*$/";	//strips fame or experience ranking
-			
-			//sets data about the player
-			if($test1=="Chars"){
-				$final_output["chars"] = $test2==="0"||((int) $test2) ? ((int) $test2) : $test2;
-			}else if($test1=="Fame"){
-				$final_output["fame"] = ((int) preg_replace($regex1,"$1",$test2));
-				$final_output["fame_rank"] = (($temp = preg_replace($regex2,"$1",$test2))==$test2 && !strstr($test2, '(')) ? 1 : ((int) $temp);
-			}else if($test1=="Exp"){
-				$final_output["exp"] = ((int) preg_replace($regex1,"$1",$test2));
-				$final_output["exp_rank"] = (($temp = preg_replace($regex2,"$1",$test2))==$test2 && !strstr($test2, '(')) ? 1 : ((int) $temp);
-			}else if($test1=="Rank"){
-				$final_output["rank"] = ((int) $test2);
-			}else if($test1=="Account fame"){
-				$final_output["account_fame"] = ((int) preg_replace($regex1,"$1",$test2));
-				$final_output["account_fame_rank"] = (($temp = preg_replace($regex2,"$1",$test2))==$test2 && !strstr($test2, '(')) ? 1 : ((int) $temp);
-			}else if($test1=="Guild"){
-				$final_output["guild"] = $test2;
-			}else if($test1=="Guild Rank"){
-				$final_output["guild_rank"] = $test2;
-			}else if($test1=="Created"){
-				$final_output["created"] = $test2;
-			}else if($test1=="Last seen"){
-				$final_output["last_seen"] = $test2;
-			}
+		$test1 = $node->childNodes->item(0)->nodeValue;
+		$test2 = $node->childNodes->item(1)->nodeValue;
+		$regex1 = "/^([\d]+).*/";		//strips fame or experience amount
+		$regex2 = "/^.*?\(([\d]+).*$/";	//strips fame or experience ranking
+		
+		//sets data about the player
+		if($test1=="Chars"){
+			$final_output["chars"] = $test2==="0"||((int) $test2) ? ((int) $test2) : $test2;
+		}else if($test1=="Fame"){
+			$final_output["fame"] = ((int) preg_replace($regex1,"$1",$test2));
+			$final_output["fame_rank"] = (($temp = preg_replace($regex2,"$1",$test2))==$test2 && !strstr($test2, '(')) ? 1 : ((int) $temp);
+		}else if($test1=="Exp"){
+			$final_output["exp"] = ((int) preg_replace($regex1,"$1",$test2));
+			$final_output["exp_rank"] = (($temp = preg_replace($regex2,"$1",$test2))==$test2 && !strstr($test2, '(')) ? 1 : ((int) $temp);
+		}else if($test1=="Rank"){
+			$final_output["rank"] = ((int) $test2);
+		}else if($test1=="Account fame"){
+			$final_output["account_fame"] = ((int) preg_replace($regex1,"$1",$test2));
+			$final_output["account_fame_rank"] = (($temp = preg_replace($regex2,"$1",$test2))==$test2 && !strstr($test2, '(')) ? 1 : ((int) $temp);
+		}else if($test1=="Guild"){
+			$final_output["guild"] = $test2;
+		}else if($test1=="Guild Rank"){
+			$final_output["guild_rank"] = $test2;
+		}else if($test1=="Created"){
+			$final_output["created"] = $test2;
+		}else if($test1=="Last seen"){
+			$final_output["last_seen"] = $test2;
+		}
 	}
 	
 	//output description lines (1-3)
