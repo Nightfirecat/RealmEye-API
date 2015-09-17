@@ -70,15 +70,15 @@ if($nodelist->length==0){	//this player isn't on realmeye
 			$final_output["chars"] = $test2==="0"||((int) $test2) ? ((int) $test2) : $test2;
 		}else if($test1=="Fame"){
 			$final_output["fame"] = ((int) preg_replace($regex1,"$1",$test2));
-			$final_output["fame_rank"] = (($temp = preg_replace($regex2,"$1",$test2))==$test2 && !strstr($test2, '(')) ? 1 : ((int) $temp);
+			$final_output["fame_rank"] = !strstr($test2, '(') ? -1 : ((int) preg_replace($regex2, "$1", $test2));
 		}else if($test1=="Exp"){
 			$final_output["exp"] = ((int) preg_replace($regex1,"$1",$test2));
-			$final_output["exp_rank"] = (($temp = preg_replace($regex2,"$1",$test2))==$test2 && !strstr($test2, '(')) ? 1 : ((int) $temp);
+			$final_output["exp_rank"] = !strstr($test2, '(') ? -1 : ((int) preg_replace($regex2, "$1", $test2));
 		}else if($test1=="Rank"){
 			$final_output["rank"] = ((int) $test2);
 		}else if($test1=="Account fame"){
 			$final_output["account_fame"] = ((int) preg_replace($regex1,"$1",$test2));
-			$final_output["account_fame_rank"] = (($temp = preg_replace($regex2,"$1",$test2))==$test2 && !strstr($test2, '(')) ? 1 : ((int) $temp);
+			$final_output["account_fame_rank"] = !strstr($test2, '(') ? -1 : ((int) preg_replace($regex2, "$1", $test2));
 		}else if($test1=="Guild"){
 			$final_output["guild"] = $test2;
 		}else if($test1=="Guild Rank"){
