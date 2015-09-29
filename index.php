@@ -26,6 +26,13 @@ if(preg_match("/^[a-z]{1,10}$/i",$player)===0 && preg_match("/^[a-z0-9]{11}$/i",
 
 require_once('items.php'); //import items definitions
 ini_set("user_agent","Realmeye-API/0.3 (https://github.com/Nightfirecat/RealmEye-API)");
+$api_version = '$Id$';
+$api_version = str_replace('$', '', $api_version);
+$api_version = str_replace('Id:', '', $api_version);
+$api_version = trim($api_version);
+$api_version_header = 'Realmeye-API-Version: ' . $api_version;
+trigger_error($api_version_header);
+header($api_version_header);
 
 //set up some initial vars
 $final_output=Array();
