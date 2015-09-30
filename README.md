@@ -6,11 +6,67 @@ A quick and easy portal to getting all the character information you need.
 
 ##How to use
 
-Currently, the only method available is to get a player's personal and character info, as seen on RealmEye in JSON (or JSONP) format.  
+Currently, the only method available is to get a player's personal and character info, as seen on RealmEye in JSON (or JSONP) format.
+
+##Setup
+
+To run this API on your server, you will need to ensure you have the proper
+software installed, and correctly set up your environment.
+
+To run the API, you will need the following installed on your server:
+
+* Latest Apache (known working on 2.4.7)
+* Latest PHP (known working on 5.5.9)
+* *recommended:* Git (known working with 1.9.1)
+
+Once the above are installed and configured, you can simply create your desired
+endpoint directory within your webroot and `git clone` this repository.
+
+In order to get the 'Realmeye-API-Version' header feature working properly,
+further setup is necessary - namely, a
+[smudge-clean filter](https://git-scm.com/book/en/v2/Customizing-Git-Git-Attributes#Keyword-Expansion)
+must be set up on the environment. To do this, just follow the below steps:
+
+1. Modify the directory's configuration (in `.git/config`) to add the following
+  lines:
+  
+      [filter "expand_commit_id"]
+          smudge = 'commit_smudge_filter.sh'
+          clean = 'commit_clean_filter.sh'
+  
+2. Create the following files in any directory which is included in your `PATH`:
+  
+  a. `commit_smudge_filter.sh`
+    
+      #!/bin/bash
+      
+      # on checkout, replace '$Id$' with '$Id: <hash> $'
+      commit_hash=`git log -1 --pretty=format:'%h'`
+      sed -r -e "s/\\\$Id\\\$/\$Id: $commit_hash \$/g"
+    
+  b. `commit_clean_filter.sh`
+    
+      #!/bin/bash
+      
+      # on checkin, replace '$Id: <hash> $' with '$Id$'
+      sed -r -e 's/\$Id: [a-fA-F0-9]+ \$/$Id$/g'
+    
+Once these steps are completed, the application should work as expected. Going
+forward with updates, however, each file affected by the filter will need to
+be checked out again after performing `git pull` for updates. A simple way
+to ensure all files are updated with the filter (and are made up-to-date with
+the repository) is to run the following after a `git pull`:
+
+```
+git checkout HEAD -- "$(git rev-parse --show-toplevel)"
+```
+
+This will perform `git checkout` for each file in the repository, which will
+re-run the smudge filter, updating the commit hash.
 
 * * *
 
-##Request
+##Requests
 
 <table>
 	<tr>
