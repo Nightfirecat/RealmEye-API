@@ -30,8 +30,10 @@ $api_version = '$Id$';
 $api_version = str_replace('$', '', $api_version);
 $api_version = str_replace('Id:', '', $api_version);
 $api_version = trim($api_version);
-$api_version_header = 'Realmeye-API-Version: ' . $api_version;
-header($api_version_header);
+if (preg_match('/^[a-fA-F0-9]+$/', $api_version)) {
+	$api_version_header = 'Realmeye-API-Version: ' . $api_version;
+	header($api_version_header);
+}
 
 //set up some initial vars
 $final_output=Array();
