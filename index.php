@@ -307,6 +307,7 @@ function echo_json_and_exit($output_array){
 	if($GLOBALS['callback']){
 		echo ')';
 	}
+	echo "\n";
 	exit();
 }
 
