@@ -75,7 +75,7 @@ re-run the smudge filter, updating the commit hash.
 		<th>Description</th>
 	</tr>
 	<tr>
-		<td>http://nightfirec.at/realmeye-api/</td>
+		<td>https://nightfirec.at/realmeye-api/</td>
 		<td>GET</td>
 		<td>Get player and character data.</td>
 	</tr>
@@ -329,10 +329,10 @@ re-run the smudge filter, updating the commit hash.
 
 ###Sample requests
 
-	http://nightfirec.at/realmeye-api/?player=joanofarc
-	http://nightfirec.at/realmeye-api/?id=PdT6pPU7qBN&callback=processPlayer
-	http://nightfirec.at/realmeye-api/?player=joanofarc&filter=player+chars+fame
-	http://nightfirec.at/realmeye-api/?player=joanofarc&filter=-characters+desc1+desc2+desc3
+	https://nightfirec.at/realmeye-api/?player=joanofarc
+	https://nightfirec.at/realmeye-api/?id=PdT6pPU7qBN&callback=processPlayer
+	https://nightfirec.at/realmeye-api/?player=joanofarc&filter=player+chars+fame
+	https://nightfirec.at/realmeye-api/?player=joanofarc&filter=-characters+desc1+desc2+desc3
 
 ###Sample responses
 
