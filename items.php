@@ -2,7 +2,7 @@
 
 //definitions URL, PHP definition file
 //all directory locations are relative to script location (/0.1/, /0.2/, etc)
-$definitions_url = "http://www.realmeye.com/s/y3/js/definition.js";
+$definitions_url = "https://www.realmeye.com/s/y3/js/definition.js";
 $definitions_file = "definition.php";
 
 //get headers, check if it's been updated since last seen
@@ -33,7 +33,7 @@ require "$definitions_file";
 
 //translate JS array definitions to PHP array definitions and write to $file
 function update_definitions($file){
-	$js_definitions = file_get_contents("http://www.realmeye.com/s/y3/js/definition.js");
+	$js_definitions = file_get_contents($GLOBALS['definitions_url']);
 	$inter_definitions = preg_replace("/('\-[\d]+(?:e[\d]+)?'|\"\-[\d]+(?:e[\d]+)?\"|[\d]+(?:e[\d]+)?):\[([^]]+)\],?/", "\t$1=>Array($2),\n", $js_definitions);
 	$php_definitions = preg_replace("/^items\=\{(.+),\n\};$/s", "<?php \$ITEMS=Array(\n$1\n);?>", $inter_definitions);
 	file_put_contents($file, $php_definitions);

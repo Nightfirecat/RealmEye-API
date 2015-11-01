@@ -110,27 +110,27 @@ if($nodelist->length==0){	//this player isn't on realmeye
 	if($nodelist->length==0){
 		if($final_output["chars"]==="N/A"){ /*number of chars is N/A*/
 			//hidden characters, output characters=>hidden
-			// http://www.realmeye.com/player/wizgazelle
+			// https://www.realmeye.com/player/wizgazelle
 			$final_output["characters"] = "hidden";
 		}else{
 			//no characters, output blank characters array...
-			// http://www.realmeye.com/player/yosei
+			// https://www.realmeye.com/player/yosei
 			$final_output["characters"] = Array();
 		}
 	}else{ //they have characters, find out their bp/pet status (if no last seen, won't be added)
 		$character_table;
 		if($nodelist->length==13 || ($nodelist->length==11 && $nodelist->item(9)->nodeValue=="")){
 			//bp+pet
-			// http://www.realmeye.com/player/Wylem
+			// https://www.realmeye.com/player/Wylem
 			$character_table = Array("pet","character_dyes","class","level","cqc","fame","exp","place","equips","backpack","stats_maxed", "last_seen", "last_server");
 		}else if($nodelist->length==12 || $nodelist->length==10){
 			if($nodelist->item(8)->nodeValue==""){
 				//they have a backpack, but no pets
-				// http://www.realmeye.com/player/Stration
+				// https://www.realmeye.com/player/Stration
 				$character_table = Array("character_dyes","class","level","cqc","fame","exp","place","equips","backpack","stats_maxed", "last_seen", "last_server");
 			}else{
 				//they have a pet, but no backpacks
-				// http://www.realmeye.com/player/Yukiyan
+				// https://www.realmeye.com/player/Yukiyan
 				$character_table = Array("pet","character_dyes","class","level","cqc","fame","exp","place","equips","stats_maxed", "last_seen", "last_server");
 			}
 		}else{
