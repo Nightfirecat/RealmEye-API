@@ -303,7 +303,11 @@ function echo_json_and_exit($output_array){
 	if($GLOBALS['callback']){
 		echo $GLOBALS['callback'] . '(';
 	}
-	echo json_encode($output_array);
+	if (isset($_GET['pretty'])) {
+		echo json_encode($output_array, JSON_PRETTY_PRINT);
+	} else {
+		echo json_encode($output_array);
+	}
 	if($GLOBALS['callback']){
 		echo ')';
 	}

@@ -127,6 +127,12 @@ re-run the smudge filter, updating the commit hash.
 		<td>optional</td>
 		<td>JavaScript callback function name. If passed, response will be served as JSONP</td>
 	</tr>
+	<tr>
+		<td>pretty</td>
+		<td>N/A</td>
+		<td>optional</td>
+		<td>Empty parameter. If passed, output will be provided in a line-and-tab separated format</td>
+	</tr>
 </table>
 
 ##Response values
@@ -333,6 +339,7 @@ re-run the smudge filter, updating the commit hash.
 	https://nightfirec.at/realmeye-api/?id=PdT6pPU7qBN&callback=processPlayer
 	https://nightfirec.at/realmeye-api/?player=joanofarc&filter=player+chars+fame
 	https://nightfirec.at/realmeye-api/?player=joanofarc&filter=-characters+desc1+desc2+desc3
+	https://nightfirec.at/realmeye-api/?player=joanofarc&pretty
 
 ###Sample responses
 
