@@ -16,11 +16,25 @@ software installed, and correctly set up your environment.
 To run the API, you will need the following installed on your server:
 
 * Latest Apache (known working on 2.4.7)
-* Latest PHP (known working on 5.5.9)
+* Latest PHP (known working on 5.6.0)
 * *recommended:* Git (known working with 1.9.1)
 
-Once the above are installed and configured, you can simply create your desired
-endpoint directory within your webroot and `git clone` this repository.
+Once the above are installed and configured, create your desired endpoint
+directory within your webroot and `git clone` this repository.
+
+### Automated GitHub deployment
+
+For ease of maintenance, a deployment script has been provided for
+administrators. To make use of it, simply create a copy of the provided
+`config.ini.sample` file, rename it to `config.ini`, and add a list of IPs
+allowed to run the script (manually perform deploy steps) and add the secret
+key used for the GitHub webhook.
+
+For more information on setting up a webhook for automated deployment, read
+GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
+[on Securing Webhooks](https://developer.github.com/webhooks/securing/).
+
+### The `Realmeye-API-Version` header
 
 In order to get the 'Realmeye-API-Version' header feature working properly,
 further setup is necessary - namely, a
@@ -63,6 +77,10 @@ git checkout HEAD -- "$(git rev-parse --show-toplevel)"
 
 This will perform `git checkout` for each file in the repository, which will
 re-run the smudge filter, updating the commit hash.
+
+P.S. If you are making use of the automated GitHub deployment, you will not
+need to manually perform checkouts after every pull; it is included in the
+deploy script.
 
 * * *
 

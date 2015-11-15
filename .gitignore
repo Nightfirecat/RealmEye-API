@@ -1,2 +1,6 @@
+# configuration
+config.ini
+
+# genereated files
 definition.php
 definition-modified.txt
