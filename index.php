@@ -314,5 +314,3 @@ function echo_json_and_exit($output_array){
 	echo "\n";
 	exit();
 }
-
-?>

@@ -38,5 +38,3 @@ function update_definitions($file){
 	$php_definitions = preg_replace("/^items\=\{(.+),\n\};$/s", "<?php \$ITEMS=Array(\n$1\n);?>", $inter_definitions);
 	file_put_contents($file, $php_definitions);
 }
-
-?>
