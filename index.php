@@ -141,94 +141,108 @@ if($nodelist->length==0){	//this player isn't on realmeye
 		
 		$nodelist = $xpath->query("//table[@id]/tbody/tr"); //the rows we want are inside of the only table with an id
 		foreach($nodelist as $node){ //for each row of the character table
-				for($j=0;$j<$node->childNodes->length;$j++){
-						if($character_table[$j]){ //if the field is not ""
-								if($character_table[$j]==="pet"){
-									$has_pet = $node->childNodes->item($j)->hasChildNodes();
-									$pet_data_id = $has_pet?$node->childNodes->item($j)->childNodes->item(0)->attributes->getNamedItem("data-item")->nodeValue:-1;
-									if($data_vars){
-										$character["data_pet_id"] = (int) $pet_data_id;
-									}
-									
-									if($has_pet){
-										$val = $ITEMS[$pet_data_id][0];
-									} else {
-										$val = "";
-									}
-									
-								//}else if($character_table[$j]==="cqc"){
+			for($j=0;$j<$node->childNodes->length;$j++){
+					if($character_table[$j]){ //if the field is not ""
+							if($character_table[$j]==="pet"){
+								$has_pet = $node->childNodes->item($j)->hasChildNodes();
+								$pet_data_id = $has_pet?$node->childNodes->item($j)->childNodes->item(0)->attributes->getNamedItem("data-item")->nodeValue:-1;
+								if($data_vars){
+									$character["data_pet_id"] = (int) $pet_data_id;
+								}
 								
-								}else if($character_table[$j]==="stats_maxed"){
-									$val = (int) $node->childNodes->item($j)->nodeValue;
-									
-									$stats_list = array("hp","mp","attack","defense","speed","vitality","wisdom","dexterity");
-									$attrs = $node->childNodes->item($j)->childNodes->item(0)->attributes;
-									$bonuses = $attrs->getNamedItem("data-bonuses")->nodeValue;
-									$bonuses = explode(",", substr($bonuses, 1, -1));
-									$total_stats = $attrs->getNamedItem("data-stats")->nodeValue;
-									$total_stats = explode(",", substr($total_stats, 1, -1));
-									
-									$stats = array();
-									$stats_length = count($stats_list);
-									for($i = 0; $i < $stats_length; $i++){
-										$stats[$stats_list[$i]] = $total_stats[$i] - $bonuses[$i];
-									}
-									
-									$character["stats"] = $stats;
-								}else if($character_table[$j]==="character_dyes"){
-									$attrs = $node->childNodes->item($j)->childNodes->item(0)->attributes;
-									$dye1 = $attrs->getNamedItem("data-clothing-dye-id")->nodeValue;
-									$dye2 = $attrs->getNamedItem("data-accessory-dye-id")->nodeValue;
-									$val = array();
-									if($data_vars){ $val["data_clothing_dye"] = (int) $attrs->getNamedItem("data-dye1")->nodeValue; }
-									if (!isset($ITEMS[$dye1][0])) {
-										$ITEMS[$dye1][0] = "";
-									}
-									$val["clothing_dye"] = $ITEMS[$dye1][0];
-									if($data_vars){ $val["data_accessory_dye"] = (int) $attrs->getNamedItem("data-dye2")->nodeValue; }
-									if (!isset($ITEMS[$dye2][0])) {
-										$ITEMS[$dye2][0] = "";
-									}
-									$val["accessory_dye"] = $ITEMS[$dye2][0];
-									
-									//class+skin data-var check
-									if($data_vars){
-										$character["data_class_id"] = (int) $attrs->getNamedItem("data-class")->nodeValue;
-										$character["data_skin_id"] = (int) $attrs->getNamedItem("data-skin")->nodeValue;
-									}
-								}else if($character_table[$j]==="equips"){
-									$items = $node->childNodes->item($j)->childNodes;
-									$item1 = $items->item(0)->attributes->getNamedItem("data-item")->nodeValue;
-									$item2 = $items->item(1)->attributes->getNamedItem("data-item")->nodeValue;
-									$item3 = $items->item(2)->attributes->getNamedItem("data-item")->nodeValue;
-									$item4 = $items->item(3)->attributes->getNamedItem("data-item")->nodeValue;
-									$val = array();
-									if($data_vars){ $val["data_weapon_id"] = (int) $item1; }
-									$val["weapon"] = $ITEMS[$item1][0];
-									if($data_vars){ $val["data_ability_id"] = (int) $item2; }
-									$val["ability"] = $ITEMS[$item2][0];
-									if($data_vars){ $val["data_armor_id"] = (int) $item3; }
-									$val["armor"] = $ITEMS[$item3][0];
-									if($data_vars){ $val["data_ring_id"] = (int) $item4; }
-									$val["ring"] = $ITEMS[$item4][0];
-									
-									//backpack check
-									$character["backpack"] = ($node->childNodes->item($j)->childNodes->length==5?"true":"false");
-								}else if($character_table[$j]==="last_seen"){
-									$val = $node->childNodes->item($j)->nodeValue;
-								}else if($character_table[$j]==="last_server"){
-									$val = $node->childNodes->item($j)->childNodes->item(0)->attributes->getNamedItem("title")->nodeValue;
-								}else{
-									$temp = $node->childNodes->item($j)->nodeValue;
-									if($temp==="0" ||(int) $temp){
-										$val = (int) $temp;
-									} else {
-										$val = $temp;
+								if($has_pet){
+									$val = $ITEMS[$pet_data_id][0];
+								} else {
+									$val = "";
+								}
+								
+							//}else if($character_table[$j]==="cqc"){
+							
+							}else if($character_table[$j]==="stats_maxed"){
+								$val = (int) $node->childNodes->item($j)->nodeValue;
+								
+								$stats_list = array("hp","mp","attack","defense","speed","vitality","wisdom","dexterity");
+								$attrs = $node->childNodes->item($j)->childNodes->item(0)->attributes;
+								$bonuses = $attrs->getNamedItem("data-bonuses")->nodeValue;
+								$bonuses = explode(",", substr($bonuses, 1, -1));
+								$total_stats = $attrs->getNamedItem("data-stats")->nodeValue;
+								$total_stats = explode(",", substr($total_stats, 1, -1));
+								
+								$stats = array();
+								$stats_length = count($stats_list);
+								for($i = 0; $i < $stats_length; $i++){
+									$stats[$stats_list[$i]] = $total_stats[$i] - $bonuses[$i];
+								}
+								
+								$character["stats"] = $stats;
+							}else if($character_table[$j]==="character_dyes"){
+								$attrs = $node->childNodes->item($j)->childNodes->item(0)->attributes;
+								$dye1 = $attrs->getNamedItem("data-clothing-dye-id")->nodeValue;
+								$dye2 = $attrs->getNamedItem("data-accessory-dye-id")->nodeValue;
+								$val = array();
+								if($data_vars){ $val["data_clothing_dye"] = (int) $attrs->getNamedItem("data-dye1")->nodeValue; }
+								if (!isset($ITEMS[$dye1][0])) {
+									$ITEMS[$dye1][0] = "";
+								}
+								$val["clothing_dye"] = $ITEMS[$dye1][0];
+								if($data_vars){ $val["data_accessory_dye"] = (int) $attrs->getNamedItem("data-dye2")->nodeValue; }
+								if (!isset($ITEMS[$dye2][0])) {
+									$ITEMS[$dye2][0] = "";
+								}
+								$val["accessory_dye"] = $ITEMS[$dye2][0];
+								
+								//class+skin data-var check
+								if($data_vars){
+									$character["data_class_id"] = (int) $attrs->getNamedItem("data-class")->nodeValue;
+									$character["data_skin_id"] = (int) $attrs->getNamedItem("data-skin")->nodeValue;
+								}
+							}else if($character_table[$j]==="equips"){
+								$item_indeces = array(
+									'weapon',
+									'ability',
+									'armor',
+									'ring'
+								);
+								$item_wrappers = $node->childNodes->item($j)->childNodes;
+								$character_item_names = array();
+								for ($i = 0; $i < count($item_indeces); $i++) {
+									$character_item_names[] = end(explode('/', $item_wrappers->item($i)->childNodes->item(0)->attributes->getNamedItem('href')->nodeValue));
+								}
+
+								$val = array();
+								foreach ($character_item_names as $character_index=>$character_item) {
+									foreach ($ITEMS as $item_id=>$item_index) {
+										$comparison = preg_replace('/^[^\/]+\//', '', $item_index[0]);
+										$comparison = strtolower($comparison);
+										$comparison = preg_replace('/[\W]+/', '-', $comparison);
+
+										if ($comparison === $character_item) {
+											if ($data_vars) {
+												$val['data_' . $item_indeces[$character_index] . '_id'] = (int) $item_id;
+											}
+											$val[$item_indeces[$character_index]] = $item_index[0];
+											break;
+										}
 									}
 								}
-							$character[$character_table[$j]] = $val;
-						}
-				}
+
+								//backpack check
+								$character["backpack"] = ($item_wrappers->length === 5 ? "true" : "false");
+							}else if($character_table[$j]==="last_seen"){
+								$val = $node->childNodes->item($j)->nodeValue;
+							}else if($character_table[$j]==="last_server"){
+								$val = $node->childNodes->item($j)->childNodes->item(0)->attributes->getNamedItem("title")->nodeValue;
+							}else{
+								$temp = $node->childNodes->item($j)->nodeValue;
+								if($temp==="0" ||(int) $temp){
+									$val = (int) $temp;
+								} else {
+									$val = $temp;
+								}
+							}
+						$character[$character_table[$j]] = $val;
+					}
+			}
 			//if the character has no pet, bp, last-seen or last-server index, set their values to "" as opposed to leaving the index out
 			$optionalColumns = array("pet","backpack","last_seen","last_server");
 			foreach($optionalColumns as $optional_column){
