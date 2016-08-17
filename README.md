@@ -15,8 +15,8 @@ software installed, and correctly set up your environment.
 
 To run the API, you will need the following installed on your server:
 
-* Latest Apache (known working on 2.4.7)
-* Latest PHP (known working on 5.6.0)
+* Latest Apache (known working on 2.4.20)
+* Latest PHP (known working on 7.0.9-1)
 * *recommended:* Git (known working with 1.9.1)
 
 Once the above are installed and configured, create your desired endpoint
