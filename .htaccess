@@ -1,5 +1,5 @@
 # Don't need to see those!
-<FilesMatch "(items.php|definition.php|LICENSE|README.md|definition-modified.txt)">
+<FilesMatch "(items.php|definition.php|LICENSE|README.md|definition-modified.txt|config.ini)">
 	Order allow,deny
 	Deny from all
 	Satisfy All
