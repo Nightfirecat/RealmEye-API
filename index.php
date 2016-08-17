@@ -316,7 +316,7 @@ function array_intersect_key_recursive($array1, $array2){
 }
 
 function echo_json_and_exit($output_array){
-	if($GLOBALS['callback']){
+	if (isset($_GET['callback']) && $_GET['callback']) {
 		echo $GLOBALS['callback'] . '(';
 	}
 	if (isset($_GET['pretty'])) {
@@ -324,7 +324,7 @@ function echo_json_and_exit($output_array){
 	} else {
 		echo json_encode($output_array);
 	}
-	if($GLOBALS['callback']){
+	if (isset($_GET['callback']) && $_GET['callback']) {
 		echo ')';
 	}
 	echo "\n";
