@@ -206,7 +206,9 @@ if($nodelist->length==0){	//this player isn't on realmeye
 								$item_wrappers = $node->childNodes->item($j)->childNodes;
 								$character_item_names = array();
 								for ($i = 0; $i < count($item_indeces); $i++) {
-									$character_item_names[] = end(explode('/', $item_wrappers->item($i)->childNodes->item(0)->attributes->getNamedItem('href')->nodeValue));
+									$item_href = $item_wrappers->item($i)->childNodes->item(0)->attributes->getNamedItem('href')->nodeValue;
+									$split_href = explode('/', $item_href);
+									$character_item_names[] = $split_href[count($split_href) - 1];
 								}
 
 								$val = array();
