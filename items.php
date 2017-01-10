@@ -34,7 +34,13 @@ require "$definitions_file";
 //translate JS array definitions to PHP array definitions and write to $file
 function update_definitions($file){
 	$js_definitions = file_get_contents($GLOBALS['definitions_url']);
-	$inter_definitions = preg_replace("/('\-[\d]+(?:e[\d]+)?'|\"\-[\d]+(?:e[\d]+)?\"|[\d]+(?:e[\d]+)?):\[([^]]+)\],?/", "\t$1=>Array($2),\n", $js_definitions);
-	$php_definitions = preg_replace("/^items\=\{(.+),\n\};$/s", "<?php \$ITEMS=Array(\n$1\n);?>", $inter_definitions);
+	$js_capture_regex = '/((["\'])?\-?[\d]+(?:e[\d]+)?\2?):\[([^\]]+)\],?/';
+	$php_substitution_pattern = '$1=>Array($3),';
+	preg_match_all($js_capture_regex, $js_definitions, $matches, PREG_PATTERN_ORDER);
+	$php_definitions = '<?php $ITEMS=Array(' . "\n";
+	for ($i = 0; $i < count($matches[0]); $i++) {
+		$php_definitions .= "\t" . preg_replace($js_capture_regex, $php_substitution_pattern, $matches[0][$i]) . "\n";
+	}
+	$php_definitions = substr($php_definitions, 0, -2) . "\n" . ');';
 	file_put_contents($file, $php_definitions);
 }
