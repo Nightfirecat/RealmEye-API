@@ -5,6 +5,11 @@
 	Satisfy All
 </FilesMatch>
 
+# Enable CORS for this directory
+<IfModule mod_headers.c>
+	Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
 Options +FollowSymlinks
 
 # Redirect version-specific requests (old feature) to current
