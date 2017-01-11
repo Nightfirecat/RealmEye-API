@@ -6,7 +6,7 @@
 
 	// don't attempt checks if server doesn't have configs set up
 	if (file_exists($CONFIG_FILE)) {
-		$config = parse_ini_file('config.ini');
+		$config = parse_ini_file($CONFIG_FILE);
 		$request_body = file_get_contents('php://input');
 		if ($request_body !== '') {
 			$secure_hash = 'sha1=' . hash_hmac('sha1', $request_body, $config['REALMEYE-API_SECRET']);
