@@ -1,63 +1,69 @@
 <?php
-	// initial script based on https://gist.github.com/1809044 by oodavid
-	// prepare to run, verify params/request body
+	// based on oodavid's initial script: https://gist.github.com/1809044
+
+	// set up params verifying request body and configs
 	$CONFIG_FILE = 'config.ini';
 	$HEADERS = apache_request_headers();
+	$REQUEST_BODY = file_get_contents('php://input');
+	$REQUEST_JSON = json_decode($REQUEST_BODY, true);
+	$LOCAL_BRANCH = trim(shell_exec('git rev-parse --abbrev-ref HEAD'));
 
-	// don't attempt checks if server doesn't have configs set up
-	if (file_exists($CONFIG_FILE)) {
+	// don't attempt access checks if server doesn't have configs set up
+	if (file_exists($CONFIG_FILE) && is_readable($CONFIG_FILE)) {
 		$config = parse_ini_file($CONFIG_FILE);
-		$request_body = file_get_contents('php://input');
-		if ($request_body !== '') {
-			$secure_hash = 'sha1=' . hash_hmac('sha1', $request_body, $config['REALMEYE-API_SECRET']);
+		// confirm the request came from GitHub before processing request body
+		if ($REQUEST_BODY !== '') {
+			$secure_hash = 'sha1=' . hash_hmac('sha1', $REQUEST_BODY, $config['REALMEYE-API_SECRET']);
 			if (!isset($HEADERS['X-Hub-Signature']) || !hash_equals($secure_hash, $HEADERS['X-Hub-Signature'])) {
-				exit("Non-GitHub content, no pull initiated.");
+				exit('Non-GitHub content, no pull initiated.');
+			// don't pull if the delivered branch doesn't match the local repo's branch
+			} else if ($REQUEST_JSON['ref'] !== ('refs/heads/' . $LOCAL_BRANCH)) {
+				exit('Push event came from branch that did not match local branch: ' . $LOCAL_BRANCH . '; no pull initiated.');
 			}
-			$request = json_decode($request_body, true);
-			if ($request['ref'] !== 'refs/heads/master') {
-				exit("Push event came from non-master branch, no pull initiated.");
-			}
-		} else {
-			if (!in_array($_SERVER['REMOTE_ADDR'], $config['allowed_manual_deploy_ips'])) {
-				exit("Your IP does not have permission to trigger manual deployments.");
-			}
+			$pull_branch = str_replace('refs/heads/', '', $REQUEST_JSON['ref']);
+		// only allow empty-body requests (page hits) from whitelisted IPs
+		} else if (!in_array($_SERVER['REMOTE_ADDR'], $config['allowed_manual_deploy_ips'])) {
+			exit('Your IP does not have permission to trigger manual deployments.');
 		}
 	} else {
-		error_log('WARNING: Cannot read config.ini, file may be read-protected or missing; skipping deploy checks.');
+		error_log('WARNING: Cannot read ' . $CONFIG_FILE . ', file may be read-protected or missing; skipping access checks.');
 	}
 
-	// The commands
+	if (empty($pull_branch)) {
+		$pull_branch = $LOCAL_BRANCH;
+	}
+	// git commands to be executed
 	$commands = array(
-		'echo $PWD',
-		'git pull',
-		'git status',
-		'git log -1 --oneline',
+		'git fetch',
+		'git clean -dfx -e "config.ini*"',
+		'git reset origin/' . $pull_branch . ' --hard',
 		'git checkout HEAD -- "$(git rev-parse --show-toplevel)"',
-		'grep \'Id\' index.php',
+		'grep "Id" index.php',
 	);
 
-	// Run the commands for output
+	// run the commands for output
 	$output = '';
-	foreach($commands AS $command){
+	foreach($commands as $command){
 		// Run it
 		$tmp = shell_exec($command);
 		// Output
-		$output .= "<span style=\"color: #6be234;\">\$</span> <span style=\"color: #729fcf;\">{$command}\n</span>";
-		$output .= htmlentities(trim($tmp)) . "\n";
+		$output .= '<span class="cli-anchor">$</span> <span class="cli-output">' . $command . "\n" . '</span>';
+		$output .= htmlentities(trim($tmp)) . "\n\n";
 	}
-	// Make it pretty for manual user access
+// make it pretty for manual user access
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+	<link rel="stylesheet" href="deploy.css">
 	<meta charset="utf-8">
 	<title>GitHub Deployment Script</title>
 </head>
-<body style="background-color: #000; color: #fff; font-weight: bold; padding: 0 10px;">
+<body>
 <pre>
  .  ____  .
  |/      \|
-[| <span style="color: #f00;">&hearts;    &hearts;</span> |]
+[| <span class="eyes">&hearts;    &hearts;</span> |]
  |___==___|
 
 

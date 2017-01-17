@@ -1,0 +1,18 @@
+body {
+	background-color: black;
+	color: white;
+	font-weight: bold;
+	padding: 0 10px;
+}
+
+.eyes {
+	color: red;
+}
+
+.cli-anchor {
+	color: #6be234;
+}
+
+.cli-output {
+	color: #729fcf;
+}
