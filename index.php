@@ -4,6 +4,17 @@
  * Scrapes character information for a specific player
  */
 
+// Set user agent (for RealmEye calls) and API version header
+ini_set("user_agent","Realmeye-API/0.3 (https://github.com/Nightfirecat/RealmEye-API)");
+$api_version = '$Id$';
+$api_version = str_replace('$', '', $api_version);
+$api_version = str_replace('Id:', '', $api_version);
+$api_version = trim($api_version);
+if (preg_match('/^[a-fA-F0-9]+$/', $api_version)) {
+	$api_version_header = 'Realmeye-API-Version: ' . $api_version;
+	header($api_version_header);
+}
+
 if(isset($_GET['player']) && $_GET['player']){
 	$player = $_GET['player'];
 } else if(isset($_GET['id']) && $_GET['id']){
@@ -25,15 +36,6 @@ if(preg_match("/^[a-z]{1,10}$/i",$player)===0 && preg_match("/^[a-z0-9]{11}$/i",
 }
 
 require_once('items.php'); //import items definitions
-ini_set("user_agent","Realmeye-API/0.3 (https://github.com/Nightfirecat/RealmEye-API)");
-$api_version = '$Id$';
-$api_version = str_replace('$', '', $api_version);
-$api_version = str_replace('Id:', '', $api_version);
-$api_version = trim($api_version);
-if (preg_match('/^[a-fA-F0-9]+$/', $api_version)) {
-	$api_version_header = 'Realmeye-API-Version: ' . $api_version;
-	header($api_version_header);
-}
 
 //set up some initial vars
 $final_output=array();
