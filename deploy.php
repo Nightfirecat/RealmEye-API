@@ -6,7 +6,15 @@
 	$HEADERS = apache_request_headers();
 	$REQUEST_BODY = file_get_contents('php://input');
 	$REQUEST_JSON = json_decode($REQUEST_BODY, true);
-	$LOCAL_BRANCH = trim(shell_exec('git rev-parse --abbrev-ref HEAD'));
+	$local_branch_script = 'localbranch.sh';
+	$checkout_script = 'checkout.sh';
+	$handle = popen('./' . $local_branch_script, 'r');
+	$handle_response = '';
+	while (!feof($handle)) {
+		$handle_response .= fread($handle, 8192);
+	}
+	$LOCAL_BRANCH = trim($handle_response);
+	pclose($handle);
 
 	// don't attempt access checks if server doesn't have configs set up
 	if (file_exists($CONFIG_FILE) && is_readable($CONFIG_FILE)) {
@@ -32,24 +40,20 @@
 	if (empty($pull_branch)) {
 		$pull_branch = $LOCAL_BRANCH;
 	}
-	// git commands to be executed
-	$commands = array(
-		'git fetch',
-		'git clean -dfx -e "config.ini*"',
-		'git reset origin/' . $pull_branch . ' --hard',
-		'git checkout HEAD -- "$(git rev-parse --show-toplevel)"',
-		'grep "Id" index.php',
-	);
-
-	// run the commands for output
-	$output = '';
-	foreach($commands as $command){
-		// Run it
-		$tmp = shell_exec($command);
-		// Output
-		$output .= '<span class="cli-anchor">$</span> <span class="cli-output">' . $command . "\n" . '</span>';
-		$output .= htmlentities(trim($tmp)) . "\n\n";
+	// execute git clean / checkout
+	$shell_script_call = './' . $checkout_script . ' ' . $pull_branch;
+	$handle = popen($shell_script_call, 'r');
+	$handle_response = '';
+	while (!feof($handle)) {
+		$handle_response .= fread($handle, 8192);
 	}
+	$checkout_response = trim($handle_response);
+	pclose($handle);
+
+	// construct output string
+	$output = file_get_contents($checkout_script);
+	$output = preg_replace('/^(.+)$/m', '<span class="cli-anchor">$</span> <span class="cli-output">$1</span>', $output);
+	$output .= "\n" . $checkout_response;
 // make it pretty for manual user access
 ?>
 <!DOCTYPE html>
