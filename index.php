@@ -74,7 +74,7 @@ if($nodelist->length==0){	//this player isn't on realmeye
 		$regex2 = "/^.*?\(([\d]+).*$/";	//strips fame or experience ranking
 		
 		//sets data about the player
-		if($test1=="Chars"){
+		if($test1=="Characters"){
 			$final_output["chars"] = $test2==="0"||((int) $test2) ? ((int) $test2) : $test2;
 		}else if($test1=="Fame"){
 			$final_output["fame"] = ((int) preg_replace($regex1,"$1",$test2));
