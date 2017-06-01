@@ -1,14 +1,14 @@
 the unofficial
 
-#RealmEye API
+# RealmEye API
 
 A quick and easy portal to getting all the character information you need.
 
-##How to use
+## How to use
 
 Currently, the only method available is to get a player's personal and character info, as seen on RealmEye in JSON (or JSONP) format.
 
-##Setup
+## Setup
 
 To run this API on your server, you will need to ensure you have the proper
 software installed, and correctly set up your environment.
@@ -16,8 +16,8 @@ software installed, and correctly set up your environment.
 To run the API, you will need the following installed on your server:
 
 * Latest Apache (known working on 2.4.20)
-* Latest PHP (known working on 7.0.9-1)
-* *recommended:* Git (known working with 1.9.1)
+* Latest PHP (known working on 7.1.5)
+* *recommended:* Git (known working with 2.7.4)
 
 Once the above are installed and configured, create your desired endpoint
 directory within your webroot and `git clone` this repository.
@@ -36,7 +36,7 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 
 * * *
 
-##Requests
+## Requests
 
 <table>
 	<tr>
@@ -51,7 +51,7 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 	</tr>
 </table>
 
-###Parameters
+### Parameters
 
 <table>
 	<tr>
@@ -105,7 +105,7 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 	</tr>
 </table>
 
-##Response values
+## Response values
 
 <table>
 	<tr>
@@ -195,7 +195,7 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 	</tr>
 </table>
 
-###character
+### character
 
 <table>
 	<tr>
@@ -303,7 +303,7 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 	</tr>
 </table>
 
-###Sample requests
+### Sample requests
 
 	https://nightfirec.at/realmeye-api/?player=joanofarc
 	https://nightfirec.at/realmeye-api/?id=PdT6pPU7qBN&callback=processPlayer
@@ -311,7 +311,7 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 	https://nightfirec.at/realmeye-api/?player=joanofarc&filter=-characters+desc1+desc2+desc3
 	https://nightfirec.at/realmeye-api/?player=joanofarc&pretty
 
-###Sample responses
+### Sample responses
 
 For `player=joanofarc&data_vars=true`:
 
@@ -408,11 +408,3 @@ For `player=joanofarc&filter=-characters+desc1+desc2+desc3`:
 	"last_seen"            : "2013-08-02 07:04:16 at USNorthWest as Rogue"
 }
 ```
-
-##Changelog
-
-###v0.3.2; 9/16/2015
-* Removed old code (and old changelog)
-* Added .gitignore and .htaccess
-* Closed #12
-* README reflects domain change
