@@ -1,6 +1,18 @@
 <?php
 	// based on oodavid's initial script: https://gist.github.com/1809044
 
+	// Executes the passed (shell) command
+	// Returns the trimmed string output
+	function proc_exec($command) {
+		$handle = popen($command, 'r');
+		$handle_response = '';
+		while (!feof($handle)) {
+			$handle_response .= fread($handle, 8192);
+		}
+		pclose($handle);
+		return trim($handle_response);
+	}
+
 	// set up params verifying request body and configs
 	$CONFIG_FILE = 'config.ini';
 	$HEADERS = apache_request_headers();
@@ -8,13 +20,7 @@
 	$REQUEST_JSON = json_decode($REQUEST_BODY, true);
 	$local_branch_script = 'localbranch.sh';
 	$checkout_script = 'checkout.sh';
-	$handle = popen('./' . $local_branch_script, 'r');
-	$handle_response = '';
-	while (!feof($handle)) {
-		$handle_response .= fread($handle, 8192);
-	}
-	$LOCAL_BRANCH = trim($handle_response);
-	pclose($handle);
+	$LOCAL_BRANCH = proc_exec('./' . $local_branch_script);
 
 	// don't attempt access checks if server doesn't have configs set up
 	if (file_exists($CONFIG_FILE) && is_readable($CONFIG_FILE)) {
@@ -42,13 +48,7 @@
 	}
 	// execute git clean / checkout
 	$shell_script_call = './' . $checkout_script . ' ' . $pull_branch;
-	$handle = popen($shell_script_call, 'r');
-	$handle_response = '';
-	while (!feof($handle)) {
-		$handle_response .= fread($handle, 8192);
-	}
-	$checkout_response = trim($handle_response);
-	pclose($handle);
+	$checkout_response = proc_exec($shell_script_call);
 
 	// construct output string
 	$output = file_get_contents($checkout_script);

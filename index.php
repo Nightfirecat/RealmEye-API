@@ -6,11 +6,9 @@
 
 // Set user agent (for RealmEye calls) and API version header
 ini_set("user_agent","Realmeye-API/0.3 (https://github.com/Nightfirecat/RealmEye-API)");
-$api_version = '$Id$';
-$api_version = str_replace('$', '', $api_version);
-$api_version = str_replace('Id:', '', $api_version);
-$api_version = trim($api_version);
-if (preg_match('/^[a-fA-F0-9]+$/', $api_version)) {
+$api_version_file = 'rev.txt';
+if (file_exists($api_version_file) && is_readable($api_version_file)) {
+	$api_version = file_get_contents($api_version_file);
 	$api_version_header = 'Realmeye-API-Version: ' . $api_version;
 	header($api_version_header);
 }
