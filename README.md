@@ -73,19 +73,13 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 		<td>11-character id <a href="https://www.realmeye.com/recently-seen-unnamed-players">as it appears in an unnamed player's RealmEye URL</a>. If not included, <code>player</code> is requred</td>
 	</tr>
 	<tr>
-		<td>data_vars</td>
-		<td>boolean</td>
-		<td>optional</td>
-		<td>If <code>true</code> is passed, all relevant <code>data-*</code> attributes will be returned (<a href="#response-values">see below for examples of such values</a>)</td>
-	</tr>
-	<tr>
 		<td>filter</td>
 		<td>string</td>
 		<td>optional</td>
 		<td>
 			Accepts a space-separated string of variable names, with an optional leading hyphen.
-			When not prefaced with a hyphen, directs the API only to return values with keys appearing in the given list.
-			When prefaced with a hyphen, directs the API to return all usual values with keys not listed.
+			When not prefaced with a hyphen, directs the API to return only values with keys appearing in the given list.
+			When prefaced with a hyphen, directs the API to return all usual values except those matching the provided keys.
 			<br /><br />
 			Note: values nested within arrays will not be displayed unless their parent key is listed as well.
 			(ex. <code>class</code> for characters will not be displayed unless <code>character</code> is also passed within the list)
@@ -120,13 +114,23 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 	</tr>
 	<tr>
 		<td>donator</td>
-		<td>boolean (string)</td>
-		<td>"true" if the player donated to Realmeye, "false" otherwise</td>
+		<td>boolean</td>
+		<td><code>true</code> if the player donated to Realmeye, <code>false</code> otherwise</td>
 	</tr>
 	<tr>
 		<td>chars</td>
-		<td>int / string</td>
-		<td>Count of characters seen on RealmEye. If characters are hidden, returns "N/A"</td>
+		<td>int</td>
+		<td>Count of characters seen on RealmEye. If characters are hidden, this is <code>-1</code></td>
+	</tr>
+	<tr>
+		<td>skins</td>
+		<td>int</td>
+		<td>Number of skins unlocked. If characters are hidden, this is <code>-1</code></td>
+	</tr>
+	<tr>
+		<td>skins_rank</td>
+		<td>int</td>
+		<td>Rank of number of skins. If characters are hidden, this is <code>-1</code></td>
 	</tr>
 	<tr>
 		<td>fame</td>
@@ -166,32 +170,37 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 	<tr>
 		<td>guild</td>
 		<td>string</td>
-		<td>Guild name. Not present for guildless players</td>
+		<td>Guild name. This value is <code>""</code> for guildless players</td>
 	</tr>
 	<tr>
 		<td>guild_rank</td>
 		<td>string</td>
-		<td>Guild position title. (Initiate, Member, Officer, Leader, or Founder) Not present for guildless players</td>
+		<td>Guild position title. (Initiate, Member, Officer, Leader, or Founder) This value is <code>""</code> for guildless players</td>
 	</tr>
 	<tr>
 		<td>created</td>
 		<td>string</td>
-		<td>Approximation of account age</td>
+		<td>Approximation of account age. May display <code>"hidden"</code> by player preference</td>
 	</tr>
 	<tr>
-		<td>last_seen</td>
+		<td>player_last_seen</td>
 		<td>string</td>
-		<td>"{datetime} at {server} as {class}". If last-seen time/location is hidden, returns "hidden"</td>
+		<td><code>"{datetime} at {server} as {class}"</code>. May display <code>"hidden"</code> by player preference</td>
 	</tr>
 	<tr>
 		<td>desc1, desc2, desc3</td>
 		<td>string</td>
-		<td>Full strings of each description line (by numbered line) of the player. If the given line is empty, returns ""</td>
+		<td>Full strings of each description line (by numbered line) of the player. If the given line is empty, this value is <code>""</code></td>
 	</tr>
 	<tr>
 		<td>characters</td>
-		<td>array / string</td>
-		<td>Array of displayed characters. If characters are hidden, returns "hidden"</td>
+		<td>array</td>
+		<td>Array of displayed characters. If characters are hidden, this array will be empty and <strong>characters_hidden</strong> will be <code>true</code></td>
+	</tr>
+	<tr>
+		<td>characters_hidden</td>
+		<td>boolean</td>
+		<td><code>true</code> if the player's characters are hidden, <code>false</code> otherwise</td>
 	</tr>
 </table>
 
@@ -206,23 +215,23 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 	<tr>
 		<td>data_pet_id</td>
 		<td>int</td>
-		<td>Item <code>id</code> of the given pet. -1 if character has no pet (passed only if <code>data_vars</code> is <code>true</code>)</td>
+		<td>Item <code>id</code> of the given pet. <code>-1</code> if character has no pet</td>
 	</tr>
 	<tr>
 		<td>pet</td>
 		<td>string</td>
-		<td>Pet type (not player-assigned pet name). "" if character has no pet</td>
+		<td>Pet type. (not player-assigned pet name) <code>""</code> if character has no pet</td>
 	</tr>
 	<tr>
 		<td>character_dyes</td>
 		<td>dict</td>
 		<td>
-			List of character dyes as strings.<br />
-			<code>data_clothing_dye</code> is the numbered <code>id</code> of the <em>color</em>, not of the item. (for use in rendering character images, for example)<br />
+			Dictionary of character dyes as strings and dye data as ints.<br />
 			<code>clothing_dye</code> is the name of the large cloth/dye<br />
-			<code>data_accessory_dye</code> is the numbered <code>id</code> of the <em>color</em>, not of the item. (for use in rendering charcter images, for example)<br />
 			<code>accessory_dye</code> is the name of the small cloth/dye<br /><br />
-			Data values are passed only if <code>data_vars</code> is <code>true</code>, and are 0 for undyed characters. Cloth/dye names are "" if un-dyed
+			<code>data_clothing_dye</code> is the numbered <code>id</code> of the <em>color</em>, not of the item. (for use in rendering character images, for example)<br />
+			<code>data_accessory_dye</code> is the numbered <code>id</code> of the <em>color</em>, not of the item. (for use in rendering charcter images, for example)<br />
+			Data values are <code>0</code> for undyed characters. Cloth/dye names are <code>""</code> if un-dyed
 		</td>
 	</tr>
 	<tr>
@@ -233,12 +242,12 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 	<tr>
 		<td>data_class_id</td>
 		<td>int</td>
-		<td><code>id</code> assigned to that character's class (passed only if <code>data_vars</code> is <code>true</code>)</td>
+		<td><code>id</code> assigned to that character's class</td>
 	</tr>
 	<tr>
 		<td>data_skin_id</td>
 		<td>int</td>
-		<td><code>id</code> assigned to that character's skin. 0 if character is using the class's default skin (passed only if <code>data_vars</code> is <code>true</code>)</td>
+		<td><code>id</code> assigned to that character's skin. 0 if character is using the class's default skin</td>
 	</tr>
 	<tr>
 		<td>level</td>
@@ -269,15 +278,15 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 		<td>equips</td>
 		<td>dict</td>
 		<td>
-			List of item <code>id</code>s as ints (if <code>data_vars</code> was <code>true</code>), and equipments as strings.<br />
-			Data-variable keys are <code>data_weapon_id</code>, <code>data_ability_id</code>, <code>data_armor_id</code>, and <code>data_ring_id</code>. Name keys are <code>weapon</code>, <code>ability</code>, <code>armor</code>, and <code>ring</code>.<br />
-			Empty slots' values are -1 and "Empty slot", respectively.
+			Dictionary of equipments as strings and item <code>id</code>s as ints.<br />
+			Name keys are <strong>weapon</strong>, <strong>ability</strong>, <strong>armor</strong>, and <strong>ring</strong>. Data-variable keys are <strong>data_weapon_id</strong>, <strong>data_ability_id</strong>, <strong>data_armor_id</strong>, and <strong>data_ring_id</strong>.<br />
+			Empty slots' values are <code>"Empty slot"</code> and <code>-1</code>, respectively.
 		</td>
 	</tr>
 	<tr>
 		<td>backpack</td>
-		<td>boolean (string)</td>
-		<td>"true" if character has a backpack, "false" otherwise</td>
+		<td>boolean</td>
+		<td><code>true</code> if character has a backpack, <code>false</code> otherwise</td>
 	</tr>
 	<tr>
 		<td>stats_maxed</td>
@@ -288,94 +297,100 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 		<td>stats</td>
 		<td>dict</td>
 		<td>
-			List of individual base stats (hp, mp, attack, defense, speed, vitality, wisdom, and dexterity) as ints.
+			Dictionary of individual base stats (<strong>hp</strong>, <strong>mp</strong>, <strong>attack</strong>, <strong>defense</strong>, <strong>speed</strong>, <strong>vitality</strong>, <strong>wisdom</strong>, and <strong>dexterity</strong>) as ints.
 		</td>
 	</tr>
 	<tr>
 		<td>last_seen</td>
-		<td>datetime</td>
-		<td>"{year}-{month}-{day} {hour}:{minute}:{second}". If last-seen time/location is hidden, returns ""</td>
+		<td>string</td>
+		<td><code>"YYYY-MM-DD hh:mm:ss"</code>. If last-seen time/location is hidden, this value is <code>""</code></td>
 	</tr>
 	<tr>
 		<td>last_server</td>
 		<td>string</td>
-		<td>Full name of last server seen in. (e.g. "USNorthWest") If last-seen time/location is hidden, returns ""</td>
+		<td>Full name of last server seen in. (e.g. <code>"USNorthWest"</code>) If last-seen time/location is hidden, this value is <code>""</code></td>
 	</tr>
 </table>
 
 ### Sample requests
 
-	https://nightfirec.at/realmeye-api/?player=joanofarc
-	https://nightfirec.at/realmeye-api/?id=PdT6pPU7qBN&callback=processPlayer
-	https://nightfirec.at/realmeye-api/?player=joanofarc&filter=player+chars+fame
-	https://nightfirec.at/realmeye-api/?player=joanofarc&filter=-characters+desc1+desc2+desc3
-	https://nightfirec.at/realmeye-api/?player=joanofarc&pretty
+* `GET https://nightfirec.at/realmeye-api/?player=joanofarc`
+* `GET https://nightfirec.at/realmeye-api/?id=PdT6pPU7qBN&callback=processPlayer`
+* `GET https://nightfirec.at/realmeye-api/?player=joanofarc&filter=player+chars+fame`
+* `GET https://nightfirec.at/realmeye-api/?player=joanofarc&filter=-characters+desc1+desc2+desc3`
+* `GET https://nightfirec.at/realmeye-api/?player=joanofarc&pretty`
 
 ### Sample responses
 
-For `player=joanofarc&data_vars=true`:
+For `player=joanofarc`:
 
 ```
 {
-	"player"               : "JoanOfArc",
-	"chars"                : 13,
-	"fame"                 : 8300,
-	"fame_rank"            : 497,
-	"exp"                  : 13152470,
-	"exp_rank"             : 513,
-	"rank"                 : 62,
-	"account_fame"         : 35662,
-	"account_fame_rank"    : 264,
-	"guild"                : "Night Owls",
-	"guild_rank"           : "Officer",
-	"created"              : "~1 year and 137 days ago",
-	"last_seen"            : "2013-08-02 07:04:16 at USNorthWest as Rogue",
-	"desc1"                : "I fight for the glory of France.",
-	"desc2"                : "https:\/\/www.youtube.com\/nightfirecat\/",
-	"desc3"                : "https:\/\/JoanOfArcRotMG.wordpress.com\/",
-	"characters"           : [
-		{
-			"data_pet_id"          : 32611,
-			"pet"                  : "Gummy Bear",
-			"character_dyes"       : {
-				"data_clothing_dye"    : 150994946,
-				"clothing_dye"         : "Large Blue Lace Cloth",
-				"data_accessory_dye"   : 83886083,
-				"accessory_dye"        : "Small Sweater Cloth"
-			},
-			"class"                : "Rogue",
-			"level"                : 20,
-			"cqc"                  : 4,
-			"fame"                 : 608,
-			"exp"                  : 805974,
-			"place"                : 589,
-			"equips"               : {
-				"data_weapon_id"       : 3082,
-				"weapon"               : "Dirk of Cronus",
-				"data_ability_id"      : 2855,
-				"ability"              : "Cloak of Ghostly Concealment",
-				"data_armor_id"        : 3112,
-				"armor"                : "Spectral Cloth Armor",
-				"data_ring_id"         : 2978,
-				"ring"                 : "Ring of the Pyramid"
-			},
-			"backpack"             : "true",
-			"stats_maxed"          : 8,
-			"stats"                : {
-				"hp"                   : 720,
-				"mp"                   : 252,
-				"attack"               : 50,
-				"defense"              : 25,
-				"speed"                : 75,
-				"vitality"             : 40,
-				"wisdom"               : 50,
-				"dexterity"            : 75
-			},
-			"last_seen"            : "2013-08-02 07:04:16",
-			"last_server"          : "USNorthWest"
-		},
-		//... (all other characters)
-	]
+    "account_fame"         : 35662,
+    "account_fame_rank"    : 264,
+    "characters"           : [
+        {
+            "backpack"             : true,
+            "character_dyes"       : {
+                "accessory_dye"        : "Small Sweater Cloth"
+                "clothing_dye"         : "Large Blue Lace Cloth",
+                "data_accessory_dye"   : 83886083,
+                "data_clothing_dye"    : 150994946,
+            },
+            "class"                : "Rogue",
+            "cqc"                  : 4,
+            "data_class_id"        : 768,
+            "data_pet_id"          : 32611,
+            "data_skin_id"         : 913,
+            "equips"               : {
+                "ability"              : "Cloak of Ghostly Concealment",
+                "armor"                : "Spectral Cloth Armor",
+                "data_ability_id"      : 2855,
+                "data_armor_id"        : 3112,
+                "data_ring_id"         : 2978,
+                "data_weapon_id"       : 3082,
+                "ring"                 : "Ring of the Pyramid"
+                "weapon"               : "Dirk of Cronus",
+            },
+            "exp"                  : 805974,
+            "fame"                 : 608,
+            "last_seen"            : "2013-08-02 07:04:16",
+            "last_server"          : "USNorthWest"
+            "level"                : 20,
+            "pet"                  : "Gummy Bear",
+            "place"                : 589,
+            "stats"                : {
+                "attack"               : 50,
+                "defense"              : 25,
+                "dexterity"            : 75
+                "hp"                   : 720,
+                "mp"                   : 252,
+                "speed"                : 75,
+                "vitality"             : 40,
+                "wisdom"               : 50,
+            },
+            "stats_maxed"          : 8
+        },
+        //... (all other characters)
+    ],
+    "characters_hidden"    : false,
+    "chars"                : 13,
+    "created"              : "~1 year and 137 days ago",
+    "desc1"                : "I fight for the glory of France.",
+    "desc2"                : "https://www.youtube.com/nightfirecat/",
+    "desc3"                : "https://JoanOfArcRotMG.wordpress.com/",
+    "donator"              : true,
+    "exp"                  : 13152470,
+    "exp_rank"             : 513,
+    "fame"                 : 8300,
+    "fame_rank"            : 497,
+    "guild"                : "Night Owls",
+    "guild_rank"           : "Officer",
+    "player"               : "JoanOfArc",
+    "player_last_seen"     : "2013-08-02 07:04:16 at USNorthWest as Rogue",
+    "rank"                 : 62,
+    "skins"                : 0,
+    "skins_rank"           : 103495
 }
 ```
 
@@ -383,9 +398,9 @@ For `player=joanofarc&filter=player+chars+fame`:
 
 ```
 {
-	"player"               : "JoanOfArc",
-	"chars"                : 13,
-	"fame"                 : 8300
+    "chars"                : 13,
+    "fame"                 : 8300
+    "player"               : "JoanOfArc",
 }
 ```
 
@@ -393,18 +408,22 @@ For `player=joanofarc&filter=-characters+desc1+desc2+desc3`:
 
 ```
 {
-	"player"               : "JoanOfArc",
-	"chars"                : 13,
-	"fame"                 : 8300,
-	"fame_rank"            : 497,
-	"exp"                  : 13152470,
-	"exp_rank"             : 513,
-	"rank"                 : 62,
-	"account_fame"         : 35662,
-	"account_fame_rank"    : 264,
-	"guild"                : "Night Owls",
-	"guild_rank"           : "Officer",
-	"created"              : "~1 year and 137 days ago",
-	"last_seen"            : "2013-08-02 07:04:16 at USNorthWest as Rogue"
+    "account_fame"         : 35662,
+    "account_fame_rank"    : 264,
+    "characters_hidden"    : false,
+    "chars"                : 13,
+    "created"              : "~1 year and 137 days ago",
+    "donator"              : true,
+    "exp"                  : 13152470,
+    "exp_rank"             : 513,
+    "fame"                 : 8300,
+    "fame_rank"            : 497,
+    "guild"                : "Night Owls",
+    "guild_rank"           : "Officer",
+    "player"               : "JoanOfArc",
+    "player_last_seen"     : "2013-08-02 07:04:16 at USNorthWest as Rogue",
+    "rank"                 : 62,
+    "skins"                : 0,
+    "skins_rank"           : 103495
 }
 ```
