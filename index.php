@@ -216,16 +216,22 @@ if($nodelist->length==0){	//this player isn't on realmeye
 								$item_wrappers = $node->childNodes->item($j)->childNodes;
 								$character_item_names = array();
 								for ($i = 0; $i < count($item_indeces); $i++) {
-									$item_href = $item_wrappers->item($i)->childNodes->item(0)->attributes->getNamedItem('href')->nodeValue;
-									$split_href = explode('/', $item_href);
-									$character_item_names[] = $split_href[count($split_href) - 1];
+									$item_container = $item_wrappers->item($i);
+									$item_link_node = $item_container->childNodes->item(0);
+									$item_href_node = $item_link_node->attributes->getNamedItem('href');
+									if ($item_href_node !== NULL) {
+										$item_href = $item_href_node->nodeValue;
+										$split_href = explode('/', $item_href);
+										$character_item_names[] = $split_href[count($split_href) - 1];
+									} else {
+										$character_item_names[] = 'empty-slot';
+									}
 								}
 
 								$val = array();
 								foreach ($character_item_names as $character_index=>$character_item) {
 									foreach ($ITEMS as $item_id=>$item_index) {
-										$comparison = preg_replace('/^[^\/]+\//', '', $item_index[0]);
-										$comparison = strtolower($comparison);
+										$comparison = strtolower($item_index[0]);
 										$comparison = preg_replace('/[\W]+/', '-', $comparison);
 
 										if ($comparison === $character_item) {
