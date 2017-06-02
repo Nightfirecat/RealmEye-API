@@ -35,12 +35,12 @@ require "$definitions_file";
 function update_definitions($file){
 	$js_definitions = file_get_contents($GLOBALS['definitions_url']);
 	$js_capture_regex = '/((["\'])?\-?[\d]+(?:e[\d]+)?\2?):\[([^\]]+)\],?/';
-	$php_substitution_pattern = '$1=>Array($3),';
+	$php_substitution_pattern = '$1=>[$3],';
 	preg_match_all($js_capture_regex, $js_definitions, $matches, PREG_PATTERN_ORDER);
-	$php_definitions = '<?php $ITEMS=Array(' . "\n";
+	$php_definitions = '<?php $ITEMS=[' . "\n";
 	for ($i = 0; $i < count($matches[0]); $i++) {
 		$php_definitions .= "\t" . preg_replace($js_capture_regex, $php_substitution_pattern, $matches[0][$i]) . "\n";
 	}
-	$php_definitions = substr($php_definitions, 0, -2) . "\n" . ');';
+	$php_definitions .= '];';
 	file_put_contents($file, $php_definitions);
 }
