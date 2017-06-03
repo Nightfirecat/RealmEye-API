@@ -173,6 +173,11 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 		<td>Guild name. This value is <code>""</code> for guildless players</td>
 	</tr>
 	<tr>
+		<td>guild_confirmed</td>
+		<td>bool</td>
+		<td><code>true</code> if the user is confirmed their guild, <code>false</code> otherwise. This should only be <code>false</code> for members of guilds whose names contain spaces, and who have not been "confirmed" as a guild member in RealmEye</td>
+	</tr>
+	<tr>
 		<td>guild_rank</td>
 		<td>string</td>
 		<td>Guild position title. (Initiate, Member, Officer, Leader, or Founder) This value is <code>""</code> for guildless players</td>
