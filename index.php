@@ -84,7 +84,8 @@ if($nodelist->length==0){	//this player isn't on realmeye
 			$final_output["account_fame"] = ((int) preg_replace($regex1,"$1",$test2));
 			$final_output["account_fame_rank"] = !strstr($test2, '(') ? -1 : ((int) preg_replace($regex2, "$1", $test2));
 		}else if($test1=="Guild"){
-			$final_output["guild"] = $test2;
+			$guild_anchor_node = $node->childNodes->item(1)->childNodes->item(0);
+			$final_output["guild"] = $guild_anchor_node->nodeValue;
 		}else if($test1=="Guild Rank"){
 			$final_output["guild_rank"] = $test2;
 		}else if($test1=="Created"){
