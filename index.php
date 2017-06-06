@@ -6,11 +6,21 @@
 
 // Set user agent (for RealmEye calls) and API version header
 ini_set('user_agent', 'Realmeye-API/0.4 (https://github.com/Nightfirecat/RealmEye-API)');
-$api_version_file = 'rev.txt';
-if (file_exists($api_version_file) && is_readable($api_version_file)) {
-	$api_version = file_get_contents($api_version_file);
-	$api_version_header = 'Realmeye-API-Version: ' . $api_version;
-	header($api_version_header);
+
+// Emit RealmEye-API-Version header if config is absent or if
+// `emit_version_header = true` in configuration file. This header will not be
+// emitted if `emit_version_header = false` is set in the configuration file.
+$CONFIG_FILE = 'config.ini';
+if (file_exists($CONFIG_FILE) && is_readable($CONFIG_FILE)) {
+	$config = parse_ini_file($CONFIG_FILE);
+	if (!isset($config['emit_version_header']) || $config['emit_version_header']) {
+		$api_version_file = 'rev.txt';
+		if (file_exists($api_version_file) && is_readable($api_version_file)) {
+			$api_version = file_get_contents($api_version_file);
+			$api_version_header = 'RealmEye-API-Version: ' . $api_version;
+			header($api_version_header);
+		}
+	}
 }
 
 if (!empty($_GET['player'])) {
