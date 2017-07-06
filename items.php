@@ -1,26 +1,28 @@
 <?php
+/*
+Item loader; creates and includes item definitions file
+*/
 
-//definitions URL, PHP definition file
-//all directory locations are relative to script location (/0.1/, /0.2/, etc)
+// definitions URL, PHP definition file
 $definitions_url = 'https://www.realmeye.com/s/y3/js/definition.js';
 $definitions_file = 'definition.php';
 
-//get headers, check if it's been updated since last seen
+// get headers, check if it's been updated since last seen
 $definitions_headers = get_headers($definitions_url, 1);
 if($definitions_headers){
-	//last-modified file
+	// last-modified file
 	$last_seen_modified_file = 'definition-modified.txt';
 	if (!file_exists($last_seen_modified_file)) {
 		file_put_contents($last_seen_modified_file, '');
 	}
 	$last_modified = $definitions_headers['Last-Modified'];
 
-	//get last entry if redirects were necessary
+	// get last entry if redirects were necessary
 	if(is_array($last_modified)){
 		$last_modified = $last_modified[count($last_modified)-1];
 	}
 
-	//compare to locally cached timestamp (of last update)
+	// compare to locally cached timestamp (of last update)
 	$last_seen_modified = file_get_contents($last_seen_modified_file);
 	if(!$last_seen_modified || $last_seen_modified !== $last_modified){
 		file_put_contents($last_seen_modified_file, $last_modified);
@@ -28,10 +30,10 @@ if($definitions_headers){
 	}
 }
 
-//add the $ITEMS variable - loaded after potential definitions update above
-require $definitions_file;
+// add the $ITEMS variable - loaded after potential definitions update above
+require_once $definitions_file;
 
-//translate JS array definitions to PHP array definitions and write to $file
+// translate JS array definitions to PHP array definitions and write to $file
 function update_definitions($file){
 	$js_definitions = file_get_contents($GLOBALS['definitions_url']);
 	$js_capture_regex = '/((["\'])?\-?[\d]+(?:e[\d]+)?\2?):\[([^\]]+)\],?/';

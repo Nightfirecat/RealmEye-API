@@ -1,5 +1,5 @@
 #!/bin/bash
 git fetch
-git clean -dfx -e 'config.ini*'
+cat generated-files.txt | xargs git clean -dfx
 git reset origin/"${1}" --hard
 git log -1 --format='%h' > rev.txt

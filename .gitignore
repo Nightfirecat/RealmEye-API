@@ -2,6 +2,7 @@
 config.ini
 
 # genereated files
+log/
 definition.php
 definition-modified.txt
 rev.txt

@@ -6,3 +6,5 @@ REALMEYE-API_SECRET = 'Password1!'
 
 [toggles]
 emit_version_header = true
+log_file_name = 'realmeyeapi'
+log_level = 'error'
