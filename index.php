@@ -454,7 +454,7 @@ if ($nodelist->length === 0) {	// this player isn't on realmeye
 	}
 
 	$final_output = RealmEyeAPIUtils::ksort_recursive($final_output);
-	$intersect_filter = RealmEyeAPIUtils::create_filter($final_output);
+	$intersect_filter = RealmEyeAPIUtils::apply_filter($final_output, $_GET['filter']);
 	$final_output = RealmEyeAPIUtils::array_intersect_key_recursive($final_output, $intersect_filter);
 
 	// output and exit

@@ -56,28 +56,30 @@ class RealmEyeAPIUtils {
 
 	// Static functions
 
-	// Accepts an array
-	// Returns an array with keys matching the filter in $_GET['filter']
+	// Accepts an array and an optional/nullable filter string
+	// Returns an array with keys matching the filter in $filter_string
 	// That is, the returned array will have only keys matching the terms in
-	// $_GET['filter'] if it is an intersecting filter, or only keys NOT
-	// matching those in $_GET['filter'] if the first character is '-',
+	// $filter_string if it is an intersecting filter, or only keys NOT
+	// matching those in $filter_string if the first character is '-',
 	// indicating a differential filter
-	public static function create_filter(array $to_be_filtered): array {
-		$filter = self::create_filter_base($to_be_filtered);
-		if (!empty($_GET['filter'])) {
-			$filter_terms = $_GET['filter'];
-			if ($filter_terms[0] === '-') {
+	public static function apply_filter(
+		array $to_be_filtered,
+		string $filter_string = null
+	): array {
+		$filtered_array = self::create_filter_base($to_be_filtered);
+		if (!empty($filter_string)) {
+			if ($filter_string[0] === '-') {
 				$mode = 'diff';
-				$filter_terms = substr($filter_terms, 1);
+				$filter_string = substr($filter_string, 1);
 			} else {
 				$mode = 'intersect';
 			}
 			// must be assoc. array; values don't matter, hence array_fill_keys
-			$filter_terms = array_fill_keys(explode(' ', $filter_terms), null);
+			$filter_string = array_fill_keys(explode(' ', $filter_string), null);
 			$filter_method = 'array_'.$mode.'_key';
-			$filter = $filter_method($filter, $filter_terms);
+			$filtered_array = $filter_method($filtered_array, $filter_string);
 		}
-		return $filter;
+		return $filtered_array;
 	}
 
 	// Accepts an array
@@ -104,7 +106,8 @@ class RealmEyeAPIUtils {
 	// Performs `array_intersect_key()` on $array1 and any arrays it contains
 	// using $array2 as the compare base
 	public static function array_intersect_key_recursive(
-		array $array1, array $array2
+		array $array1,
+		array $array2
 	): array {
 		$output = [];
 		foreach ($array1 as $key => $value) {
