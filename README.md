@@ -6,7 +6,8 @@ A quick and easy portal to getting all the character information you need.
 
 ## How to use
 
-Currently, the only method available is to get a player's personal and character info, as seen on RealmEye in JSON (or JSONP) format.
+Currently, the only method available is to get a player's personal and character
+info, as seen on RealmEye in JSON (or JSONP) format.
 
 ## Setup
 
