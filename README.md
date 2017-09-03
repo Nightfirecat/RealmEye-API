@@ -22,13 +22,41 @@ To run the API, you will need the following installed on your server:
 Once the above are installed and configured, create your desired endpoint
 directory within your webroot and `git clone` this repository.
 
+### Configuration
+
+This application provides a sample set of configurations in `config.ini.sample`
+as a basis for application configuration. Though it runs fine without any
+configuration file provided, you may specify your own in a `config.ini` file.
+
+The available configuration keys and their functions are as follows:
+
+* **`allowed_manual_deploy_ips[]`**: Each entry is a string defining an IP
+  address which is allowed to trigger deployments manually. This string may
+  contain wildcards&mdash;`*`&mdash;which may substitute for any part of the
+  IP address being checked. For example, `127.*` would allow `127.0.0.1`.
+* **`REALMEYE-API_SECRET`**: This is the secret string configured to
+  authenticate automated GitHub deployments.
+  [(read more below)](#automated-github-deployment)
+* **`emit_version_header`**: A boolean which toggles the output of the
+  `RealmEye-API-Version` header. If absent, the header will be emitted.
+* **`log_file_name`**: A string defining the name of log files stored in
+  `logs/`.
+* **`log_level`**: A string which sets the limiting level for statements to be
+  logged via the application logger. Allowed values are:
+  - `'off'`
+  - `'fatal'`
+  - `'error'`
+  - `'warn'`
+  - `'info'`
+  - `'debug'`
+  - `'trace'`
+
 ### Automated GitHub deployment
 
 For ease of maintenance, a deployment script has been provided for
-administrators. To make use of it, simply create a copy of the provided
-`config.ini.sample` file, rename it to `config.ini`, and add a list of IPs
-allowed to run the script (manually perform deploy steps) and add the secret
-key used for the GitHub webhook.
+administrators. To make use of it, set `allowed_manual_deploy_ips` and
+`REALMEYE-API_SECRET` in your `config.ini` file, per the
+[Configuration section above](#configuration).
 
 For more information on setting up a webhook for automated deployment, read
 GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and

@@ -1,5 +1,6 @@
 [allowed_manual_deploy_ips]
 allowed_manual_deploy_ips[] = '127.0.0.1'
+allowed_manual_deploy_ips[] = '127.0.*'
 
 [github_secret]
 REALMEYE-API_SECRET = 'Password1!'

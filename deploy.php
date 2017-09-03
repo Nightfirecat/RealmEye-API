@@ -21,6 +21,41 @@ function proc_exec($command) {
 	return trim($handle_response);
 }
 
+// Accepts an IP address string and an array of IP strings with asterisks
+// permitted as wildcards
+// Returns a boolean representing whether the given IP address is present
+// in the passed allowed IPs array. It will return true if it is present, or
+// if it matches an IP including a wildcard string.
+// (eg. '127.*' will match '127.0.0.1')
+function ip_allowed_to_deploy(string $ip, array $allowed_ips): bool {
+	foreach ($allowed_ips as $allowed_ip_string) {
+		if (strpos($allowed_ip_string, '*') === false) {
+			$logger->debug(
+				'Checking IP string equivalence for $allowed_ip entry ' .
+				$allowed_ip_string
+			);
+			if ($ip === $allowed_ip_string) {
+				return true;
+			}
+		} else {
+			$logger->debug(
+				'Checking IP string wildcard filter for $allowed_ip entry ' .
+				$allowed_ip_string
+			);
+			// Replace '.' with '\.' and '*' with '.*'
+			// Also surround newly-formed regex string with /^ ... $/
+			$allowed_ip_regex = str_replace('.', '\.', $allowed_ip_string);
+			$allowed_ip_regex = str_replace('*', '.*', $allowed_ip_regex);
+			$allowed_ip_regex = '/^' . $allowed_ip_regex . '$/';
+			$logger->trace('allowed_ip_regex: ' . $allowed_ip_regex);
+			if (preg_match($allowed_ip_regex, $ip)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 // set up params verifying request body and configs
 $REQUEST_HEADERS = apache_request_headers();
 $REQUEST_BODY = file_get_contents('php://input');
@@ -60,7 +95,10 @@ if ($config) {
 		$pull_branch = str_replace('refs/heads/', '', $REQUEST_JSON['ref']);
 	// only allow empty-body requests (page hits) from whitelisted IPs
 	} else if (
-		!in_array($_SERVER['REMOTE_ADDR'], $config['allowed_manual_deploy_ips'])
+		!ip_allowed_to_deploy(
+			$_SERVER['REMOTE_ADDR'],
+			$config['allowed_manual_deploy_ips']
+		)
 	) {
 		$logger->info($_SERVER['REMOTE_ADDR'] . ' denied deploy access.');
 		exit();
