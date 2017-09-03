@@ -30,7 +30,7 @@ function proc_exec($command) {
 function ip_allowed_to_deploy(string $ip, array $allowed_ips): bool {
 	foreach ($allowed_ips as $allowed_ip_string) {
 		if (strpos($allowed_ip_string, '*') === false) {
-			$logger->debug(
+			$GLOBALS['logger']->debug(
 				'Checking IP string equivalence for $allowed_ip entry ' .
 				$allowed_ip_string
 			);
@@ -38,7 +38,7 @@ function ip_allowed_to_deploy(string $ip, array $allowed_ips): bool {
 				return true;
 			}
 		} else {
-			$logger->debug(
+			$GLOBALS['logger']->debug(
 				'Checking IP string wildcard filter for $allowed_ip entry ' .
 				$allowed_ip_string
 			);
@@ -47,7 +47,7 @@ function ip_allowed_to_deploy(string $ip, array $allowed_ips): bool {
 			$allowed_ip_regex = str_replace('.', '\.', $allowed_ip_string);
 			$allowed_ip_regex = str_replace('*', '.*', $allowed_ip_regex);
 			$allowed_ip_regex = '/^' . $allowed_ip_regex . '$/';
-			$logger->trace('allowed_ip_regex: ' . $allowed_ip_regex);
+			$GLOBALS['logger']->trace('allowed_ip_regex: ' . $allowed_ip_regex);
 			if (preg_match($allowed_ip_regex, $ip)) {
 				return true;
 			}
