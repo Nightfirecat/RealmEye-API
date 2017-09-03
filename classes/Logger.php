@@ -73,23 +73,23 @@ class Logger {
 	}
 
 	// Shorthand aliases for write('level', ...)
-	public function fatal(string $message) {
-		$this->write(__FUNCTION__, $message);
+	public function fatal(string $message): bool {
+		return $this->write(__FUNCTION__, $message);
 	}
-	public function error(string $message) {
-		$this->write(__FUNCTION__, $message);
+	public function error(string $message): bool {
+		return $this->write(__FUNCTION__, $message);
 	}
-	public function warn(string $message) {
-		$this->write(__FUNCTION__, $message);
+	public function warn(string $message): bool {
+		return $this->write(__FUNCTION__, $message);
 	}
-	public function info(string $message) {
-		$this->write(__FUNCTION__, $message);
+	public function info(string $message): bool {
+		return $this->write(__FUNCTION__, $message);
 	}
-	public function debug(string $message) {
-		$this->write(__FUNCTION__, $message);
+	public function debug(string $message): bool {
+		return $this->write(__FUNCTION__, $message);
 	}
-	public function trace(string $message) {
-		$this->write(__FUNCTION__, $message);
+	public function trace(string $message): bool {
+		return $this->write(__FUNCTION__, $message);
 	}
 
 	// Accepts a log level and log message string to be formatted

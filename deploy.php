@@ -11,7 +11,7 @@ $logger = $utils->logger;
 
 // Executes the passed (shell) command
 // Returns the trimmed string output
-function proc_exec($command) {
+function proc_exec(string $command): string {
 	$handle = popen($command, 'r');
 	$handle_response = '';
 	while (!feof($handle)) {

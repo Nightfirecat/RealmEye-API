@@ -34,7 +34,7 @@ if($definitions_headers){
 require_once $definitions_file;
 
 // translate JS array definitions to PHP array definitions and write to $file
-function update_definitions($file){
+function update_definitions(string $file){
 	$js_definitions = file_get_contents($GLOBALS['definitions_url']);
 	$js_capture_regex = '/((["\'])?\-?[\d]+(?:e[\d]+)?\2?):\[([^\]]+)\],?/';
 	$php_substitution_pattern = '$1=>[$3],';
