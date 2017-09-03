@@ -2,6 +2,7 @@
 /*
 Item loader; creates and includes item definitions file
 */
+declare(strict_types=1);
 
 // definitions URL, PHP definition file
 $definitions_url = 'https://www.realmeye.com/s/y3/js/definition.js';

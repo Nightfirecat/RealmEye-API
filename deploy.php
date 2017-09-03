@@ -3,6 +3,7 @@
 Deploy script/endpoint for GitHub deployment hooks
 Based on oodavid's initial script: https://gist.github.com/1809044
 */
+declare(strict_types=1);
 
 require_once('classes/RealmEyeAPIUtils.php');
 $utils = new RealmEyeAPIUtils();
