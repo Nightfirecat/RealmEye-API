@@ -260,16 +260,22 @@ if ($nodelist->length === 0) {	// this player isn't on realmeye
 			if (char_table_has_backpack($nodelist)) {
 				// they have a backpack, but no pets
 				// https://www.realmeye.com/player/Stration
-				$character_table = array_diff($character_table, ['pet']);
+				$character_table = RealmEyeAPIUtils::remove_items(
+					$character_table, ['pet']
+				);
 			} else {
 				// they have a pet, but no backpacks
 				// https://www.realmeye.com/player/ROTFamouse
-				$character_table = array_diff($character_table, ['backpack']);
+				$character_table = RealmEyeAPIUtils::remove_items(
+					$character_table, ['backpack']
+				);
 			}
 		} else {
 			// no bp and no pet
 			// check recently-seen unnamed players
-			$character_table = array_diff($character_table, ['backpack', 'pet']);
+			$character_table = RealmEyeAPIUtils::remove_items(
+				$character_table, ['backpack', 'pet']
+			);
 		}
 		$logger->trace('character table: ' . print_r($character_table, true));
 
@@ -388,7 +394,7 @@ if ($nodelist->length === 0) {	// this player isn't on realmeye
 				}
 				$character[$character_table[$j]] = $val;
 				$logger->trace(
-					'character[' .$character_table[$j] . '] = ' . $val
+					'character[' . $character_table[$j] . '] = ' . $val
 				);
 			}
 			// if the character has no pet, bp, last-seen or last-server index, set their values to '' as opposed to leaving the index out

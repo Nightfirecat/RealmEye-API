@@ -132,6 +132,13 @@ class RealmEyeAPIUtils {
 		return $array;
 	}
 
+	// Accepts two arrays
+	// Returns an array equal to $a with any matching items in $remove removed
+	// Note: this will re-index the array to ensure a proper 0-* indexing
+	public static function remove_items(array $a, array $remove): array {
+		return array_values(array_diff($a, $remove));
+	}
+
 	// Accepts a libXMLError object
 	// Returns a boolean indicating whether the passed libxml error object is an
 	// invalid tag warning
