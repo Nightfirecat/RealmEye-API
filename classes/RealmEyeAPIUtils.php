@@ -145,7 +145,7 @@ class RealmEyeAPIUtils {
 	public static function libxml_error_is_tag_warning(
 		libXMLError $error
 	): bool {
-		$words = explode(' ', $error->message);
+		$words = array_map('trim', explode(' ', $error->message));
 		return (
 			// error code is "invalid tag"
 			$error->code === 801 &&
