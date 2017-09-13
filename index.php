@@ -6,9 +6,9 @@ Scrapes character information for a specific player
 declare(strict_types=1);
 
 require_once('classes/RealmEyeAPIUtils.php');
-$utils = new RealmEyeAPIUtils();
-$config = $utils->config;
-$logger = $utils->logger;
+new RealmEyeAPIUtils();
+$config = RealmEyeAPIUtils::$config;
+$logger = RealmEyeAPIUtils::$logger;
 
 // Set user agent (for RealmEye calls)
 ini_set(

@@ -7,37 +7,26 @@ declare(strict_types=1);
 require_once('classes/Logger.php');
 
 class RealmEyeAPIUtils {
-	private $config = null;
-	public $logger = null;
+	public static $config = null;
+	public static $logger = null;
 
+	// Initialize static variables (to be reused if required in multiple files)
 	public function __construct(string $config_path = 'config.ini') {
-		$this->config = $this->read_config($config_path);
-
-		$logger_configs = [];
-		if ($this->config) {
-			$log_configs = [
-				'log_level',
-				'log_file_name',
-			];
-			foreach ($log_configs as $log_config) {
-				if (array_key_exists($log_config, $this->config)) {
-					$logger_configs[$log_config] = $this->config[$log_config];
+		if (!self::$config) {
+			self::$config = $this->read_config($config_path);
+			$logger_configs = [];
+			if (self::$config) {
+				$log_configs = [
+					'log_level',
+					'log_file_name',
+				];
+				foreach ($log_configs as $log_config) {
+					if (array_key_exists($log_config, self::$config)) {
+						$logger_configs[$log_config] = self::$config[$log_config];
+					}
 				}
 			}
-		}
-		$this->logger = new Logger($logger_configs);
-	}
-
-	// Allow retrieval of $config
-	public function __get($name) {
-		if ($name === 'config') {
-			return $this->$name;
-		} else {
-			throw new Exception(
-				'Undefined property via __get(): ' . $name,
-				E_USER_NOTICE
-			);
-			return null;
+			self::$logger = new Logger($logger_configs);
 		}
 	}
 

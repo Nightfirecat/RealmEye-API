@@ -6,9 +6,9 @@ Based on oodavid's initial script: https://gist.github.com/1809044
 declare(strict_types=1);
 
 require_once('classes/RealmEyeAPIUtils.php');
-$utils = new RealmEyeAPIUtils();
-$config = $utils->config;
-$logger = $utils->logger;
+new RealmEyeAPIUtils();
+$config = RealmEyeAPIUtils::$config;
+$logger = RealmEyeAPIUtils::$logger;
 
 // Executes the passed (shell) command
 // Returns the trimmed string output
