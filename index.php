@@ -236,77 +236,40 @@ if ($nodelist->length === 0) {	// this player isn't on realmeye
 		$logger->trace(
 			'characters_hidden = ' . $final_output['characters_hidden']
 		);
-		$character_table = null;
-		if ($nodelist->length === 13 || ($nodelist->length === 11 && $nodelist->item(9)->nodeValue === '')) {
+		$character_table = [
+			'pet',
+			'character_dyes',
+			'class',
+			'level',
+			'cqc',
+			'fame',
+			'exp',
+			'place',
+			'equips',
+			'backpack',
+			'stats_maxed',
+			'last_seen',
+			'last_server',
+		];
+		if (char_table_has_pet_and_backpack($nodelist)) {
 			// bp+pet
 			// https://www.realmeye.com/player/Fiddy
-			$character_table = [
-				'pet',
-				'character_dyes',
-				'class',
-				'level',
-				'cqc',
-				'fame',
-				'exp',
-				'place',
-				'equips',
-				'backpack',
-				'stats_maxed',
-				'last_seen',
-				'last_server',
-			];
-		} else if ($nodelist->length === 12 || $nodelist->length === 10) {
-			if ($nodelist->item(8)->nodeValue === '') {
+			//
+			// no-op
+		} else if (char_table_has_pet_or_backpack($nodelist)) {
+			if (char_table_has_backpack($nodelist)) {
 				// they have a backpack, but no pets
 				// https://www.realmeye.com/player/Stration
-				$character_table = [
-					'character_dyes',
-					'class',
-					'level',
-					'cqc',
-					'fame',
-					'exp',
-					'place',
-					'equips',
-					'backpack',
-					'stats_maxed',
-					'last_seen',
-					'last_server',
-				];
+				$character_table = array_diff($character_table, ['pet']);
 			} else {
 				// they have a pet, but no backpacks
 				// https://www.realmeye.com/player/ROTFamouse
-				$character_table = [
-					'pet',
-					'character_dyes',
-					'class',
-					'level',
-					'cqc',
-					'fame',
-					'exp',
-					'place',
-					'equips',
-					'stats_maxed',
-					'last_seen',
-					'last_server',
-				];
+				$character_table = array_diff($character_table, ['backpack']);
 			}
 		} else {
 			// no bp and no pet
 			// check recently-seen unnamed players
-			$character_table = [
-				'character_dyes',
-				'class',
-				'level',
-				'cqc',
-				'fame',
-				'exp',
-				'place',
-				'equips',
-				'stats_maxed',
-				'last_seen',
-				'last_server',
-			];
+			$character_table = array_diff($character_table, ['backpack', 'pet']);
 		}
 		$logger->trace('character table: ' . print_r($character_table, true));
 
@@ -464,6 +427,21 @@ if ($nodelist->length === 0) {	// this player isn't on realmeye
 //
 // Function definitions
 //
+
+function char_table_has_pet_and_backpack(DOMNodeList $char_table): bool {
+	return $char_table->length === 13 || (
+	         $char_table->length === 11 &&
+	         $char_table->item(9)->nodeValue === ''
+	       );
+}
+
+function char_table_has_pet_or_backpack(DOMNodeList $char_table): bool {
+	return $char_table->length === 12 || $char_table->length === 10;
+}
+
+function char_table_has_backpack(DOMNodeList $char_table): bool {
+	return $char_table->item(8)->nodeValue === '';
+}
 
 function echo_json_and_exit(array $output_array) {
 	$default_options = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_SLASHES;
