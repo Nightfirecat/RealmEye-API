@@ -158,8 +158,6 @@ if ($nodelist->length === 0) {	// this player isn't on realmeye
 			$guild_anchor_node = $node->childNodes->item(1)->childNodes->item(0);
 			$final_output['guild'] = $guild_anchor_node->nodeValue;
 			$final_output['guild_confirmed'] = (bool)
-				// checking for spelling error here --v
-				$xpath->query('//i[@title="Not a confimed member"]')->length ||
 				$xpath->query('//i[@title="Not a confirmed member"]')->length;
 			$logger->trace(
 				'guild/guild_confirmed = ' . $final_output['guild'] . '/' .
