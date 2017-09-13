@@ -49,7 +49,7 @@ if (
 	!preg_match('/^[a-z0-9]{11}$/i', $player)
 ) {
 	// Sneaky little hobbitses.
-	$logger->error('Player name/ID invalid.');
+	$logger->error('Player name/ID invalid: ' . $player);
 	header('Content-Type: application/json; charset=utf-8');
 	header('HTTP/1.1 400 Invalid Request');
 	echo_json_and_exit(['error' => 'Invalid player name']);
