@@ -339,6 +339,7 @@ if ($nodelist->length === 0) {	// this player isn't on realmeye
 					$character['data_class_id'] = (int) $attrs->getNamedItem('data-class')->nodeValue;
 					$character['data_skin_id'] = (int) $attrs->getNamedItem('data-skin')->nodeValue;
 				} else if ($character_table[$j] === 'equips') {
+					// TODO: use ItemManager->getItemByName()
 					$item_indeces = [
 						'weapon',
 						'ability',
