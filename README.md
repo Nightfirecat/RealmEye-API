@@ -74,7 +74,7 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 		<th>Description</th>
 	</tr>
 	<tr>
-		<td>https://nightfirec.at/realmeye-api/</td>
+		<td>/</td>
 		<td>GET</td>
 		<td>Get player and character data.</td>
 	</tr>
@@ -348,11 +348,11 @@ GitHub's articles [on Webhooks](https://developer.github.com/webhooks/), and
 
 ### Sample requests
 
-* `GET https://nightfirec.at/realmeye-api/?player=joanofarc`
-* `GET https://nightfirec.at/realmeye-api/?id=PdT6pPU7qBN&callback=processPlayer`
-* `GET https://nightfirec.at/realmeye-api/?player=joanofarc&filter=player+chars+fame`
-* `GET https://nightfirec.at/realmeye-api/?player=joanofarc&filter=-characters+desc1+desc2+desc3`
-* `GET https://nightfirec.at/realmeye-api/?player=joanofarc&pretty`
+* `GET /?player=joanofarc`
+* `GET /?id=PdT6pPU7qBN&callback=processPlayer`
+* `GET /?player=joanofarc&filter=player+chars+fame`
+* `GET /?player=joanofarc&filter=-characters+desc1+desc2+desc3`
+* `GET /?player=joanofarc&pretty`
 
 ### Sample responses
 
